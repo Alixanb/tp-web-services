@@ -1,10 +1,7 @@
-function App() {
+import { AppRoutes } from '@/routes'
 
-  return (
-    <>
-      APP
-    </>
-  )
+function App() {
+  return <AppRoutes />
 }
 
 export default App
