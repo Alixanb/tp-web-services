@@ -3,19 +3,23 @@ import type {
   CreateCategoryDto,
   UpdateCategoryDto,
 } from '@/types/Category'
+import { mockApi } from '@/lib/mock-api'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+const USE_MOCK = true // Mettre à false quand l'API sera prête
 
 export const categoryService = {
   // GET /categories - Liste des catégories
   async getCategories(): Promise<Category[]> {
-    // TODO: Implémenter avec l'API
+    if (USE_MOCK) return mockApi.getCategories()
+    // TODO: Implémenter avec l'API réelle
     throw new Error('Not implemented')
   },
 
   // GET /categories/{id} - Détails d'une catégorie
   async getCategoryById(id: string): Promise<Category> {
-    // TODO: Implémenter avec l'API
+    if (USE_MOCK) return mockApi.getCategoryById(id)
+    // TODO: Implémenter avec l'API réelle
     throw new Error('Not implemented')
   },
 

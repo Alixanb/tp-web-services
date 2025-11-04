@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { reportService } from '@/services/report.service'
 import { DollarSign, Ticket, Users, TrendingUp } from 'lucide-react'
 import type { SalesReport } from '@/types/Report'
 
@@ -15,8 +16,9 @@ export function EventSalesPage() {
   const loadSalesReport = async () => {
     setLoading(true)
     try {
-      // TODO: Appeler l'API SOAP reportService.getSalesReport()
-      console.log('Chargement du rapport de vente')
+      // Charger le rapport pour le premier événement (event-1)
+      const data = await reportService.getSalesReport({ eventId: 'event-1' })
+      setReport(data)
     } catch (error) {
       console.error('Erreur lors du chargement du rapport:', error)
     } finally {

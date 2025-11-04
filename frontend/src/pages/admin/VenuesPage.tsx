@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { venueService } from '@/services/venue.service'
 import { MapPin, Plus, Edit, Trash2 } from 'lucide-react'
 import type { Venue } from '@/types/Venue'
 
@@ -16,8 +17,8 @@ export function VenuesPage() {
   const loadVenues = async () => {
     setLoading(true)
     try {
-      // TODO: Appeler l'API venueService.getVenues()
-      console.log('Chargement des lieux')
+      const data = await venueService.getVenues()
+      setVenues(data)
     } catch (error) {
       console.error('Erreur lors du chargement des lieux:', error)
     } finally {

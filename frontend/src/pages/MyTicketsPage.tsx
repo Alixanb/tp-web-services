@@ -21,8 +21,16 @@ export function MyTicketsPage() {
   const loadTickets = async () => {
     setLoading(true)
     try {
-      // TODO: Appeler l'API pour récupérer les billets de l'utilisateur
-      console.log('Chargement des billets')
+      // Récupérer tous les tickets des commandes de l'utilisateur
+      const { orderService } = await import('@/services/order.service')
+      const { authService } = await import('@/services/auth.service')
+
+      const currentUser = authService.getCurrentUser()
+      if (currentUser) {
+        const orders = await orderService.getUserOrders(currentUser.id)
+        const allTickets = orders.flatMap((order) => order.tickets)
+        setTickets(allTickets)
+      }
     } catch (error) {
       console.error('Erreur lors du chargement des billets:', error)
     } finally {

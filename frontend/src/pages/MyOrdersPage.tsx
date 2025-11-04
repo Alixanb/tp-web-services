@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { OrderCard } from '@/components/OrderCard'
+import { orderService } from '@/services/order.service'
+import { authService } from '@/services/auth.service'
 import type { Order } from '@/types/Order'
 
 export function MyOrdersPage() {
@@ -13,8 +15,11 @@ export function MyOrdersPage() {
   const loadOrders = async () => {
     setLoading(true)
     try {
-      // TODO: Appeler l'API orderService.getUserOrders()
-      console.log('Chargement des commandes')
+      const currentUser = authService.getCurrentUser()
+      if (currentUser) {
+        const data = await orderService.getUserOrders(currentUser.id)
+        setOrders(data)
+      }
     } catch (error) {
       console.error('Erreur lors du chargement des commandes:', error)
     } finally {

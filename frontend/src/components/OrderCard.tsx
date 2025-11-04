@@ -29,12 +29,12 @@ export function OrderCard({ order, onViewDetails }: OrderCardProps) {
   } as const
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow py-6">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="flex items-center gap-2">
           <Receipt className="h-5 w-5 text-primary" />
           <CardTitle className="text-sm font-medium">
-            Commande #{order.id.slice(0, 8)}
+            Commande#{order.id.replace('order-', '')}
           </CardTitle>
         </div>
         <Badge variant={statusColors[order.status]}>{order.status}</Badge>

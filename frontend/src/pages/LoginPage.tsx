@@ -1,25 +1,39 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { authService } from '@/services/auth.service'
 import { Ticket } from 'lucide-react'
 import type { LoginDto } from '@/types/User'
 
 export function LoginPage() {
+  const navigate = useNavigate()
   const [credentials, setCredentials] = useState<LoginDto>({
-    email: '',
-    password: '',
+    email: 'client@eventpass.com',
+    password: 'password',
   })
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    setError('')
+
     try {
-      // TODO: Appeler authService.login(credentials)
-      console.log('Tentative de connexion:', credentials)
+      const response = await authService.login(credentials)
+      // Rediriger en fonction du rôle
+      if (response.user.role === 'ADMIN') {
+        navigate('/admin/dashboard')
+      } else if (response.user.role === 'ORGANIZER') {
+        navigate('/organizer/events')
+      } else {
+        navigate('/')
+      }
     } catch (error) {
       console.error('Erreur de connexion:', error)
+      setError('Email ou mot de passe incorrect')
     } finally {
       setLoading(false)
     }
@@ -74,15 +88,21 @@ export function LoginPage() {
               />
             </div>
 
+            {error && (
+              <div className="text-sm text-destructive text-center">
+                {error}
+              </div>
+            )}
+
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? 'Connexion...' : 'Se connecter'}
             </Button>
 
             <div className="text-center text-sm text-muted-foreground">
-              Pas encore de compte ?{' '}
-              <a href="/register" className="text-primary hover:underline">
-                S'inscrire
-              </a>
+              <p className="mb-2">Comptes de test :</p>
+              <p className="text-xs">CLIENT: client@eventpass.com</p>
+              <p className="text-xs">ORGANIZER: organizer@eventpass.com</p>
+              <p className="text-xs">ADMIN: admin@eventpass.com</p>
             </div>
           </form>
         </CardContent>

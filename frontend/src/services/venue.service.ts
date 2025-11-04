@@ -1,17 +1,21 @@
 import type { Venue, CreateVenueDto, UpdateVenueDto } from '@/types/Venue'
+import { mockApi } from '@/lib/mock-api'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+const USE_MOCK = true // Mettre à false quand l'API sera prête
 
 export const venueService = {
   // GET /venues - Liste des lieux
   async getVenues(): Promise<Venue[]> {
-    // TODO: Implémenter avec l'API
+    if (USE_MOCK) return mockApi.getVenues()
+    // TODO: Implémenter avec l'API réelle
     throw new Error('Not implemented')
   },
 
   // GET /venues/{id} - Détails d'un lieu
   async getVenueById(id: string): Promise<Venue> {
-    // TODO: Implémenter avec l'API
+    if (USE_MOCK) return mockApi.getVenueById(id)
+    // TODO: Implémenter avec l'API réelle
     throw new Error('Not implemented')
   },
 

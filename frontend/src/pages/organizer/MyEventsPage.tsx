@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { EventCard } from '@/components/EventCard'
+import { eventService } from '@/services/event.service'
 import { Plus } from 'lucide-react'
 import type { Event } from '@/types/Event'
 
@@ -15,8 +16,10 @@ export function MyEventsPage() {
   const loadMyEvents = async () => {
     setLoading(true)
     try {
-      // TODO: Appeler l'API pour récupérer les événements de l'organisateur
-      console.log('Chargement des événements')
+      // Pour le moment, on charge tous les événements
+      // TODO: Filtrer par organizerId quand l'API sera prête
+      const data = await eventService.getEvents()
+      setEvents(data)
     } catch (error) {
       console.error('Erreur lors du chargement des événements:', error)
     } finally {

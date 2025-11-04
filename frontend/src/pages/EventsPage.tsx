@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { EventCard } from '@/components/EventCard'
 import { SearchFilters } from '@/components/SearchFilters'
+import { eventService } from '@/services/event.service'
 import type { Event, EventFilters } from '@/types/Event'
 
 export function EventsPage() {
@@ -8,16 +9,25 @@ export function EventsPage() {
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(false)
 
-  const handleSearch = async () => {
+  // Charger les événements au montage
+  useEffect(() => {
+    loadEvents()
+  }, [])
+
+  const loadEvents = async () => {
     setLoading(true)
     try {
-      // TODO: Appeler l'API eventService.getEvents(filters)
-      console.log('Recherche avec filtres:', filters)
+      const data = await eventService.getEvents(filters)
+      setEvents(data)
     } catch (error) {
-      console.error('Erreur lors de la recherche:', error)
+      console.error('Erreur lors du chargement:', error)
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleSearch = async () => {
+    await loadEvents()
   }
 
   return (
