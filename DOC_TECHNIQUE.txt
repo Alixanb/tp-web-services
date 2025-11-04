@@ -1,0 +1,220 @@
+
+
+
+
+
+
+
+
+I. Introduction et Présentation du Projet	2
+I.1. Objectif du Document	2
+I.2. Présentation du Domaine Métier : Gestion d'Événements & Billetterie	2
+I.3.	2
+II.	2
+II.1. Acteurs et Rôles	2
+II.2. Cas d'Usage Principaux (avec schémas conceptuels)	3
+III. Conception Technique	3
+III.1.	3
+III.2.	4
+III.3.	4
+IV. Spécification des APIs	5
+IV.1.	5
+IV.2.	6
+V. Conclusion	7
+
+
+
+
+
+
+
+
+
+
+
+I. Introduction et Présentation du Projet
+I.1. Objectif du Document
+Ce document présente l'architecture technique et les choix de conception pour le projet fil rouge d'écosystème de Web Services. Il sert de fondation pour le développement des modules ultérieurs, couvrant les APIs REST, les services SOAP, et la sécurité avancée.
+I.2. Présentation du Domaine Métier : Gestion d'Événements & Billetterie
+Le projet consiste à concevoir et développer une plateforme complète de billetterie en ligne, faisant partie des domaines acceptés pour le TP. Elle permet aux Organisateurs de créer et de gérer leurs événements, et aux Clients d'acheter des billets de manière sécurisée.
+I.3.Justification de la Complexité du Domaine
+Le domaine de la billetterie justifie pleinement l'architecture demandée car il implique une logique métier complexe, allant au-delà du CRUD basique.
+Gestion des Stocks et des Places Numérotées : Le stock de billets est une ressource critique gérée dynamiquement par catégorie, avec des mécanismes de réservation temporaire pour les achats.
+Processus Transactionnel : L'achat de billets est un flux critique nécessitant des transactions sécurisées, l'intégration d'un service de paiement externe, et des processus de remboursement.
+Sécurité et Rôles Granulaires : L'accès aux données sensibles (rapports de vente, listes de participants) et aux actions administratives nécessite une gestion fine des permissions entre Clients, Organisateurs, et Administrateurs.
+
+II.
+Analyse Fonctionnelle (avec Cas d'Usage)
+II.1. Acteurs et Rôles
+Le système distinguera trois rôles principaux pour garantir la gestion granulaire des rôles et permissions requise par le Module 3:
+Rôle
+Description
+Cas d'Usage REST typiques
+Client
+Achète, consulte et gère ses propres billets et commandes.
+Recherche d'événement (GET /events), Achat de billet (POST /orders), Consultation historique.
+Organisateur
+Gère ses événements, les stocks, les prix, et consulte ses rapports de vente.
+Création/Modification d'événement (POST/PUT /events), Consultation des commandes.
+Administrateur Système
+Supervise l'ensemble du système (utilisateurs, lieux) et accède aux rapports globaux.
+Gestion des lieux (CRUD /venues), Génération de rapports consolidés (via SOAP).
+
+
+II.2. Cas d'Usage Principaux (avec schémas conceptuels)
+Cas d'Usage 1 : Achat de Billet par le Client
+Le Client recherche et sélectionne une catégorie de billet pour un événement (GET /events).
+Le Client initie une commande (POST /orders). Le système réserve le stock.
+L'API interagit avec le service externe.
+Si succès, la commande passe à "payée" et un Billet est généré.
+Cas d'Usage 2 : Reporting des Ventes par l'Organisateur ou l'Administrateur
+L'acteur déclenche l'appel de l'opération generateSaleReport(eventID, date) via un Client SOAP (ou une interface d'administration via SOAP).
+Le Service SOAP interroge la base de données.
+Le Service SOAP retourne un rapport agrégé au format XML.
+
+
+III. Conception Technique
+III.1.
+Choix Technologiques (Stack)
+La stack choisie permet de respecter la liberté technologique tout en assurant la production d'APIs REST et de services SOAP.
+Composant
+Technologie Choisie
+Rôle et Justification
+Backend / API
+NestJS (TypeScript)
+Framework basé sur Node.js et TypeScript, idéal pour le développement rapide d'API REST (Module 2). Son architecture modulaire facilite l'intégration des services SOAP/SOA (Module 4).
+Base de Données
+PostgreSQL
+SGBDR relationnel obligatoire. Robuste et performant pour la gestion des transactions (stocks, commandes).
+Frontend
+React
+Technologie moderne pour développer l'application web cliente obligatoire, en assurant l'interface responsive et UX soignée (Module 5).
+
+
+III.2.
+Architecture Globale (avec schémas)
+L'architecture sera de type Architecture Orientée Services (SOA).
+Composants de l'Écosystème :
+Application Cliente (React) : Consomme l'API REST.
+API Gateway/Reverse Proxy : Point d'entrée pour les requêtes REST, gère l'authentification et le rate limiting (Module 3).
+Service REST (NestJS) : Gère toutes les opérations courantes (Recherche, CRUD, Authentification).
+Service SOAP (NestJS) : Service isolé pour les opérations critiques/administratives (Reporting, Stocks), justifiant l'approche SOA (Module 4).
+Base de Données (PostgreSQL) : Base de données relationnelle centralisée.
+À faire : Insérer le schéma d'architecture technique de l'écosystème.
+
+III.3.
+Schéma de Base de Données (Minimum 6 tables)
+Le schéma de données inclut 6 tables pour garantir la complexité demandée.
+Entités Principales :
+Utilisateur (Rôles, Infos Connexion)
+Événement (Titre, Date, Lieu_ID, Categorie_ID)
+Lieu (Nom, Adresse, Capacité)
+Catégorie (Nom_Catégorie)
+Commande (Utilisateur_ID, Date_Commande, Statut, Prix)
+Billet (Commande_ID, Evenement_ID, Numéro_Place)
+Relations Clés : La table Commande est au centre, liée à Utilisateur, à plusieurs Billets, et à une Transaction. 
+
+
+IV. Spécification des APIs
+IV.1.
+Spécification des APIs REST (Minimum 15 Endpoints)
+L'API REST implémentera le CRUD complet sur 4 entités métier (Utilisateur, Événement, Billet, Commande).
+Ressource
+Méthode
+Endpoint
+Description
+Recherche/Filtrage
+GET
+/events
+Recherche et filtrage avancé des événements (par lieu, date, catégorie).
+Événements (CRUD)
+GET
+/events/{id}
+Détails d'un événement.
+
+
+POST
+/events
+Création d'un nouvel événement (Organisateur).
+
+
+PUT
+/events/{id}
+Modification d'un événement (Organisateur).
+
+
+DELETE
+/events/{id}
+Suppression d'un événement (Organisateur/Admin).
+Commandes (CRUD)
+POST
+/orders
+Création d'une nouvelle commande (achat).
+
+
+GET
+/orders/{id}
+Détails d'une commande.
+
+
+GET
+/users/{id}/orders
+Historique des commandes de l'utilisateur.
+Billets (CRUD)
+GET
+/tickets/{id}
+Détails d'un billet spécifique.
+
+
+GET
+/orders/{id}/tickets
+Liste des billets d'une commande.
+
+
+PUT
+/tickets/{id}
+Transfert/Modification de statut (interne).
+Utilisateurs (CRUD)
+POST
+/auth/login
+Authentification de base.
+
+
+POST
+/users
+Création de compte utilisateur.
+
+
+PUT
+/users/{id}
+Modification du profil utilisateur.
+Administration
+POST
+/venues
+Ajout d'un nouveau lieu (Administrateur).
+
+IV.2.
+Définition des Services SOAP (Minimum 5 Opérations)
+Le Service SOAP gérera les opérations critiques et le reporting administratif.
+Opération SOAP (WSDL)
+Description
+Type d'Opération
+1. generateDocReport
+Génère un rapport de vente détaillé et agrégé pour un événement (Reporting).
+Administration/Reporting
+2. updateTicketStock
+Mise à jour manuelle et critique du stock de billets (Administration).
+Administration
+3. processRefund
+Déclenche le processus de remboursement pour une commande (Transaction sensible).
+Métier Critique
+4. getVenueCapacity
+Récupère la capacité maximale d'un lieu (Administration).
+Administration
+5. logAdminAction
+Enregistrement forcé de toute action administrative critique (Audit/Gouvernance).
+Gouvernance SOA
+
+V. Conclusion
+L'architecture proposée (Stack NestJS/PostgreSQL/React dans une approche SOA) est complète, cohérente et suffisamment complexe pour couvrir l'intégralité du projet fil rouge. Elle sert de plan détaillé pour le développement des APIs REST, l'intégration des services SOAP, et la mise en œuvre de la sécurité avancée au cours des modules suivants.
+
