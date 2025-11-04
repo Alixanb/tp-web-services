@@ -1,6 +1,6 @@
 # Dockerfile pour le Frontend React + Vite
 
-FROM node:18-alpine AS development
+FROM node:20-alpine AS development
 
 # Installer pnpm
 RUN npm install -g pnpm
@@ -23,7 +23,7 @@ EXPOSE 5173
 CMD ["pnpm", "dev", "--host", "0.0.0.0"]
 
 # Stage de build
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build
 
 RUN npm install -g pnpm
 
