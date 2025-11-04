@@ -1,0 +1,547 @@
+{
+  "users": [
+    {
+      "id": "user-client-1",
+      "email": "client@eventpass.com",
+      "firstName": "Marie",
+      "lastName": "Dupont",
+      "role": "CLIENT",
+      "phoneNumber": "+33612345678",
+      "createdAt": "2025-01-15T10:00:00Z",
+      "updatedAt": "2025-10-10T14:30:00Z"
+    },
+    {
+      "id": "user-organizer-1",
+      "email": "organizer@eventpass.com",
+      "firstName": "Pierre",
+      "lastName": "Martin",
+      "role": "ORGANIZER",
+      "phoneNumber": "+33623456789",
+      "createdAt": "2025-02-01T09:00:00Z",
+      "updatedAt": "2025-10-12T16:20:00Z"
+    },
+    {
+      "id": "user-admin-1",
+      "email": "admin@eventpass.com",
+      "firstName": "Sophie",
+      "lastName": "Bernard",
+      "role": "ADMIN",
+      "phoneNumber": "+33634567890",
+      "createdAt": "2025-01-01T08:00:00Z",
+      "updatedAt": "2025-10-15T11:45:00Z"
+    }
+  ],
+  "categories": [
+    {
+      "id": "cat-musique",
+      "name": "Musique",
+      "description": "Concerts et événements musicaux",
+      "icon": "music",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "cat-festival",
+      "name": "Festival",
+      "description": "Festivals et événements culturels",
+      "icon": "party-popper",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "cat-business",
+      "name": "Business",
+      "description": "Conférences et événements professionnels",
+      "icon": "briefcase",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "cat-sport",
+      "name": "Sport",
+      "description": "Événements sportifs",
+      "icon": "trending-up",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
+    }
+  ],
+  "venues": [
+    {
+      "id": "venue-1",
+      "name": "Parc de la Villette",
+      "address": "211 Avenue Jean Jaurès",
+      "city": "Paris",
+      "postalCode": "75019",
+      "country": "France",
+      "capacity": 5000,
+      "description": "Grand espace culturel en plein air",
+      "createdAt": "2025-01-05T00:00:00Z",
+      "updatedAt": "2025-01-05T00:00:00Z"
+    },
+    {
+      "id": "venue-2",
+      "name": "Halle Tony Garnier",
+      "address": "20 Place Antonin Perrin",
+      "city": "Lyon",
+      "postalCode": "69007",
+      "country": "France",
+      "capacity": 8000,
+      "description": "Salle de spectacle polyvalente",
+      "createdAt": "2025-01-05T00:00:00Z",
+      "updatedAt": "2025-01-05T00:00:00Z"
+    },
+    {
+      "id": "venue-3",
+      "name": "Bordeaux Lac",
+      "address": "Cours Charles Bricaud",
+      "city": "Bordeaux",
+      "postalCode": "33300",
+      "country": "France",
+      "capacity": 12000,
+      "description": "Grande salle de concert",
+      "createdAt": "2025-01-05T00:00:00Z",
+      "updatedAt": "2025-01-05T00:00:00Z"
+    },
+    {
+      "id": "venue-4",
+      "name": "Le Dôme",
+      "address": "48 Avenue de Saint-Just",
+      "city": "Marseille",
+      "postalCode": "13004",
+      "country": "France",
+      "capacity": 8500,
+      "description": "Salle de spectacle marseillaise",
+      "createdAt": "2025-01-05T00:00:00Z",
+      "updatedAt": "2025-01-05T00:00:00Z"
+    }
+  ],
+  "events": [
+    {
+      "id": "event-1",
+      "title": "Concert de Jazz en Plein Air",
+      "description": "Une soirée exceptionnelle de jazz avec les meilleurs musiciens français et internationaux. Profitez d'une ambiance unique en plein air.",
+      "startDate": "2025-11-15T20:00:00Z",
+      "endDate": "2025-11-15T23:00:00Z",
+      "status": "PUBLISHED",
+      "imageUrl": "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=800",
+      "venue": {
+        "id": "venue-1",
+        "name": "Parc de la Villette",
+        "address": "211 Avenue Jean Jaurès",
+        "city": "Paris",
+        "postalCode": "75019",
+        "country": "France",
+        "capacity": 5000
+      },
+      "category": {
+        "id": "cat-musique",
+        "name": "Musique",
+        "icon": "music"
+      },
+      "organizer": {
+        "id": "user-organizer-1",
+        "firstName": "Pierre",
+        "lastName": "Martin",
+        "role": "ORGANIZER"
+      },
+      "ticketCategories": [
+        {
+          "id": "ticket-cat-1-1",
+          "eventId": "event-1",
+          "name": "VIP",
+          "price": 50.0,
+          "totalStock": 100,
+          "availableStock": 75,
+          "description": "Accès backstage et meet & greet"
+        },
+        {
+          "id": "ticket-cat-1-2",
+          "eventId": "event-1",
+          "name": "Standard",
+          "price": 35.0,
+          "totalStock": 500,
+          "availableStock": 350,
+          "description": "Accès standard"
+        }
+      ],
+      "createdAt": "2025-10-01T10:00:00Z",
+      "updatedAt": "2025-10-15T14:30:00Z"
+    },
+    {
+      "id": "event-2",
+      "title": "Conférence Tech Summit 2025",
+      "description": "Le plus grand rassemblement tech de l'année. Rencontrez les leaders de l'industrie, participez à des workshops et découvrez les dernières innovations.",
+      "startDate": "2025-11-20T09:00:00Z",
+      "endDate": "2025-11-21T18:00:00Z",
+      "status": "PUBLISHED",
+      "imageUrl": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800",
+      "venue": {
+        "id": "venue-2",
+        "name": "Halle Tony Garnier",
+        "city": "Lyon",
+        "capacity": 8000
+      },
+      "category": {
+        "id": "cat-business",
+        "name": "Business",
+        "icon": "briefcase"
+      },
+      "organizer": {
+        "id": "user-organizer-1",
+        "firstName": "Pierre",
+        "lastName": "Martin",
+        "role": "ORGANIZER"
+      },
+      "ticketCategories": [
+        {
+          "id": "ticket-cat-2-1",
+          "eventId": "event-2",
+          "name": "Pass 2 jours",
+          "price": 120.0,
+          "totalStock": 200,
+          "availableStock": 155,
+          "description": "Accès complet 2 jours + networking"
+        },
+        {
+          "id": "ticket-cat-2-2",
+          "eventId": "event-2",
+          "name": "Pass 1 jour",
+          "price": 75.0,
+          "totalStock": 300,
+          "availableStock": 250
+        }
+      ],
+      "createdAt": "2025-09-15T08:00:00Z",
+      "updatedAt": "2025-10-10T12:00:00Z"
+    },
+    {
+      "id": "event-3",
+      "title": "Festival Gastronomique",
+      "description": "Découvrez les saveurs de la région avec plus de 50 chefs étoilés. Dégustations, ateliers culinaires et concerts en soirée.",
+      "startDate": "2025-11-25T11:00:00Z",
+      "endDate": "2025-11-25T22:00:00Z",
+      "status": "PUBLISHED",
+      "imageUrl": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800",
+      "venue": {
+        "id": "venue-3",
+        "name": "Bordeaux Lac",
+        "city": "Bordeaux",
+        "capacity": 12000
+      },
+      "category": {
+        "id": "cat-festival",
+        "name": "Festival",
+        "icon": "party-popper"
+      },
+      "organizer": {
+        "id": "user-organizer-1",
+        "firstName": "Pierre",
+        "lastName": "Martin",
+        "role": "ORGANIZER"
+      },
+      "ticketCategories": [
+        {
+          "id": "ticket-cat-3-1",
+          "eventId": "event-3",
+          "name": "Pass Gourmet",
+          "price": 45.0,
+          "totalStock": 300,
+          "availableStock": 100,
+          "description": "10 dégustations incluses"
+        },
+        {
+          "id": "ticket-cat-3-2",
+          "eventId": "event-3",
+          "name": "Entrée simple",
+          "price": 25.0,
+          "totalStock": 800,
+          "availableStock": 600
+        }
+      ],
+      "createdAt": "2025-09-20T09:00:00Z",
+      "updatedAt": "2025-10-12T15:30:00Z"
+    },
+    {
+      "id": "event-4",
+      "title": "Soirée Électro Night",
+      "description": "La nuit électro la plus attendue de l'année avec les meilleurs DJs internationaux. 3 scènes, effets visuels spectaculaires.",
+      "startDate": "2025-11-30T22:00:00Z",
+      "endDate": "2025-12-01T06:00:00Z",
+      "status": "PUBLISHED",
+      "imageUrl": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800",
+      "venue": {
+        "id": "venue-4",
+        "name": "Le Dôme",
+        "city": "Marseille",
+        "capacity": 8500
+      },
+      "category": {
+        "id": "cat-musique",
+        "name": "Musique",
+        "icon": "music"
+      },
+      "organizer": {
+        "id": "user-organizer-1",
+        "firstName": "Pierre",
+        "lastName": "Martin",
+        "role": "ORGANIZER"
+      },
+      "ticketCategories": [
+        {
+          "id": "ticket-cat-4-1",
+          "eventId": "event-4",
+          "name": "Early Bird",
+          "price": 35.0,
+          "totalStock": 200,
+          "availableStock": 0,
+          "description": "Prix réduit - ÉPUISÉ"
+        },
+        {
+          "id": "ticket-cat-4-2",
+          "eventId": "event-4",
+          "name": "Standard",
+          "price": 45.0,
+          "totalStock": 600,
+          "availableStock": 520
+        }
+      ],
+      "createdAt": "2025-09-25T10:00:00Z",
+      "updatedAt": "2025-10-14T18:00:00Z"
+    },
+    {
+      "id": "event-5",
+      "title": "Marathon de Paris 2026",
+      "description": "Participez au célèbre marathon de Paris. Un parcours mythique à travers les plus beaux monuments de la capitale.",
+      "startDate": "2026-04-05T08:00:00Z",
+      "endDate": "2026-04-05T14:00:00Z",
+      "status": "PUBLISHED",
+      "imageUrl": "https://images.unsplash.com/photo-1532444458054-01a7dd3e9fca?w=800",
+      "venue": {
+        "id": "venue-1",
+        "name": "Parc de la Villette",
+        "city": "Paris",
+        "capacity": 5000
+      },
+      "category": {
+        "id": "cat-sport",
+        "name": "Sport",
+        "icon": "trending-up"
+      },
+      "organizer": {
+        "id": "user-organizer-1",
+        "firstName": "Pierre",
+        "lastName": "Martin",
+        "role": "ORGANIZER"
+      },
+      "ticketCategories": [
+        {
+          "id": "ticket-cat-5-1",
+          "eventId": "event-5",
+          "name": "Dossard",
+          "price": 95.0,
+          "totalStock": 50000,
+          "availableStock": 35000
+        }
+      ],
+      "createdAt": "2025-08-01T08:00:00Z",
+      "updatedAt": "2025-10-01T09:00:00Z"
+    },
+    {
+      "id": "event-6",
+      "title": "Festival Rock Legends",
+      "description": "3 jours de rock avec les plus grandes légendes. Camping sur place, animations, et plus de 40 artistes.",
+      "startDate": "2025-12-10T14:00:00Z",
+      "endDate": "2025-12-12T23:00:00Z",
+      "status": "PUBLISHED",
+      "imageUrl": "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=800",
+      "venue": {
+        "id": "venue-3",
+        "name": "Bordeaux Lac",
+        "city": "Bordeaux",
+        "capacity": 12000
+      },
+      "category": {
+        "id": "cat-festival",
+        "name": "Festival",
+        "icon": "party-popper"
+      },
+      "organizer": {
+        "id": "user-organizer-1",
+        "firstName": "Pierre",
+        "lastName": "Martin",
+        "role": "ORGANIZER"
+      },
+      "ticketCategories": [
+        {
+          "id": "ticket-cat-6-1",
+          "eventId": "event-6",
+          "name": "Pass 3 jours + Camping",
+          "price": 180.0,
+          "totalStock": 3000,
+          "availableStock": 1200
+        },
+        {
+          "id": "ticket-cat-6-2",
+          "eventId": "event-6",
+          "name": "Pass 3 jours",
+          "price": 120.0,
+          "totalStock": 5000,
+          "availableStock": 3500
+        },
+        {
+          "id": "ticket-cat-6-3",
+          "eventId": "event-6",
+          "name": "Pass journalier",
+          "price": 50.0,
+          "totalStock": 2000,
+          "availableStock": 1800
+        }
+      ],
+      "createdAt": "2025-08-15T10:00:00Z",
+      "updatedAt": "2025-10-08T16:00:00Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "order-1",
+      "user": {
+        "id": "user-client-1",
+        "email": "client@eventpass.com",
+        "firstName": "Marie",
+        "lastName": "Dupont",
+        "role": "CLIENT"
+      },
+      "orderDate": "2025-10-10T14:30:00Z",
+      "status": "PAID",
+      "totalAmount": 100.0,
+      "tickets": [
+        {
+          "id": "ticket-1",
+          "orderId": "order-1",
+          "event": {
+            "id": "event-1",
+            "title": "Concert de Jazz en Plein Air",
+            "startDate": "2025-11-15T20:00:00Z",
+            "venue": {
+              "name": "Parc de la Villette",
+              "city": "Paris"
+            }
+          },
+          "ticketCategoryName": "VIP",
+          "seatNumber": "A12",
+          "qrCode": "EVT_event1_1698234000_a3f9c2",
+          "status": "ACTIVE",
+          "price": 50.0
+        },
+        {
+          "id": "ticket-2",
+          "orderId": "order-1",
+          "event": {
+            "id": "event-1",
+            "title": "Concert de Jazz en Plein Air",
+            "startDate": "2025-11-15T20:00:00Z",
+            "venue": {
+              "name": "Parc de la Villette",
+              "city": "Paris"
+            }
+          },
+          "ticketCategoryName": "VIP",
+          "seatNumber": "A13",
+          "qrCode": "EVT_event1_1698234001_b4g8d3",
+          "status": "ACTIVE",
+          "price": 50.0
+        }
+      ],
+      "createdAt": "2025-10-10T14:30:00Z",
+      "updatedAt": "2025-10-10T14:35:00Z"
+    },
+    {
+      "id": "order-2",
+      "user": {
+        "id": "user-client-1",
+        "email": "client@eventpass.com",
+        "firstName": "Marie",
+        "lastName": "Dupont",
+        "role": "CLIENT"
+      },
+      "orderDate": "2025-10-12T10:15:00Z",
+      "status": "PAID",
+      "totalAmount": 70.0,
+      "tickets": [
+        {
+          "id": "ticket-3",
+          "orderId": "order-2",
+          "event": {
+            "id": "event-3",
+            "title": "Festival Gastronomique",
+            "startDate": "2025-11-25T11:00:00Z",
+            "venue": {
+              "name": "Bordeaux Lac",
+              "city": "Bordeaux"
+            }
+          },
+          "ticketCategoryName": "Pass Gourmet",
+          "qrCode": "EVT_event3_1698234100_c5h9e4",
+          "status": "ACTIVE",
+          "price": 45.0
+        },
+        {
+          "id": "ticket-4",
+          "orderId": "order-2",
+          "event": {
+            "id": "event-3",
+            "title": "Festival Gastronomique",
+            "startDate": "2025-11-25T11:00:00Z",
+            "venue": {
+              "name": "Bordeaux Lac",
+              "city": "Bordeaux"
+            }
+          },
+          "ticketCategoryName": "Entrée simple",
+          "qrCode": "EVT_event3_1698234101_d6i0f5",
+          "status": "ACTIVE",
+          "price": 25.0
+        }
+      ],
+      "createdAt": "2025-10-12T10:15:00Z",
+      "updatedAt": "2025-10-12T10:20:00Z"
+    },
+    {
+      "id": "order-3",
+      "user": {
+        "id": "user-client-1",
+        "email": "client@eventpass.com",
+        "firstName": "Marie",
+        "lastName": "Dupont",
+        "role": "CLIENT"
+      },
+      "orderDate": "2025-10-05T16:45:00Z",
+      "status": "CANCELLED",
+      "totalAmount": 120.0,
+      "tickets": [],
+      "createdAt": "2025-10-05T16:45:00Z",
+      "updatedAt": "2025-10-05T17:00:00Z"
+    }
+  ],
+  "salesReports": [
+    {
+      "eventId": "event-1",
+      "eventTitle": "Concert de Jazz en Plein Air",
+      "totalRevenue": 12500.0,
+      "ticketsSold": 250,
+      "ticketsByCategory": [
+        {
+          "categoryName": "VIP",
+          "sold": 50,
+          "revenue": 2500.0
+        },
+        {
+          "categoryName": "Standard",
+          "sold": 200,
+          "revenue": 10000.0
+        }
+      ],
+      "reportDate": "2025-10-16T10:30:00Z"
+    }
+  ]
+}

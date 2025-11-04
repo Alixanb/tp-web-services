@@ -31,13 +31,13 @@ export function EventCard({ event, onSelect }: EventCardProps) {
   )
 
   return (
-    <Card className="overflow-hidden hover:shadow-xl transition-all cursor-pointer group">
-      <div className="aspect-video bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-5xl sm:text-6xl group-hover:scale-110 transition-transform overflow-hidden">
+    <Card className="overflow-hidden hover:shadow-xl transition-all cursor-pointer group pb-6">
+      <div className="aspect-video bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-5xl sm:text-6xl overflow-hidden">
         {event.imageUrl ? (
           <img
             src={event.imageUrl}
             alt={event.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover group-hover:scale-105 duration-300 transition-transform"
           />
         ) : (
           <span className="text-6xl">🎟️</span>

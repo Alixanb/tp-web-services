@@ -6,11 +6,14 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Category } from './category.entity';
 import { Ticket } from './ticket.entity';
 import { User } from './user.entity';
 import { Venue } from './venue.entity';
+import { TicketCategory } from './ticket-category.entity';
+import { EventStatus } from 'src/common/enum/role.enum';
 
 @Entity('events')
 export class Event {
@@ -24,16 +27,20 @@ export class Event {
   description: string;
 
   @Column('timestamp')
-  eventDate: Date;
+  startDate: Date;
 
-  @Column('decimal', { precision: 10, scale: 2 })
-  price: number;
+  @Column('timestamp')
+  endDate: Date;
 
-  @Column('int')
-  availableTickets: number;
+  @Column({
+    type: 'enum',
+    enum: EventStatus,
+    default: EventStatus.DRAFT,
+  })
+  status: EventStatus;
 
-  @Column('int')
-  totalTickets: number;
+  @Column({ nullable: true })
+  imageUrl?: string;
 
   @ManyToOne(() => User, (user) => user.organizedEvents)
   @JoinColumn({ name: 'organizerId' })
@@ -59,6 +66,12 @@ export class Event {
   @OneToMany(() => Ticket, (ticket) => ticket.event)
   tickets: Ticket[];
 
+  @OneToMany(() => TicketCategory, (ticketCategory) => ticketCategory.event)
+  ticketCategories: TicketCategory[];
+
   @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
