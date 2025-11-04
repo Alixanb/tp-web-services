@@ -1,0 +1,14 @@
+node_modules
+dist
+logs.txt
+.backend.pid
+.env.local
+.env.development
+.env.test
+*.log
+coverage
+.git
+.gitignore
+README.md
+.DS_Store
+
