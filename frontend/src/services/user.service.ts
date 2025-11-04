@@ -1,23 +1,19 @@
 import type { User, UpdateUserDto } from '@/types/User'
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api'
+import { apiClient } from '@/lib/api-client'
 
 export const userService = {
   // GET /users/{id} - Profil utilisateur
   async getUserById(id: string): Promise<User> {
-    // TODO: Implémenter avec l'API
-    throw new Error('Not implemented')
+    return apiClient.get<User>(`/users/${id}`)
   },
 
   // PUT /users/{id} - Modification du profil
   async updateUser(id: string, data: UpdateUserDto): Promise<User> {
-    // TODO: Implémenter avec l'API
-    throw new Error('Not implemented')
+    return apiClient.put<User>(`/users/${id}`, data)
   },
 
   // GET /users - Liste des utilisateurs (Admin)
   async getAllUsers(): Promise<User[]> {
-    // TODO: Implémenter avec l'API
-    throw new Error('Not implemented')
+    return apiClient.get<User[]>('/users')
   },
 }

@@ -2,63 +2,63 @@
 > back-end@0.0.1 start:dev /Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend
 > nest start --watch
 
-[2J[3J[H[[90m3:23:36 PM[0m] Starting compilation in watch mode...
+[2J[3J[H[[90m4:42:18 PM[0m] Starting compilation in watch mode...
 
-[[90m3:23:39 PM[0m] Found 0 errors. Watching for file changes.
+[[90m4:42:22 PM[0m] Found 0 errors. Watching for file changes.
 
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [NestFactory] Starting Nest application...
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +50ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] PassportModule dependencies initialized +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] JwtModule dependencies initialized +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] TypeOrmCoreModule dependencies initialized +162ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] AppModule dependencies initialized +1ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] AuthModule dependencies initialized +1ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] EventModule dependencies initialized +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] UsersModule dependencies initialized +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] VenuesModule dependencies initialized +1ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] CategoriesModule dependencies initialized +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] OrdersModule dependencies initialized +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [InstanceLoader] TicketsModule dependencies initialized +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RoutesResolver] AppController {/api}: +24ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api, GET} route +1ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RoutesResolver] EventController {/api/events}: +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/events, GET} route +1ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/events/:id, GET} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/events, POST} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/events/:id, PUT} route +1ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/events/:id, DELETE} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RoutesResolver] AuthController {/api/auth}: +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/auth/register, POST} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/auth/login, POST} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RoutesResolver] UsersController {/api/users}: +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/users, GET} route +1ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/users/:id, GET} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/users/:id, PUT} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/users/:id/orders, GET} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RoutesResolver] VenuesController {/api/venues}: +1ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/venues, GET} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/venues/:id, GET} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/venues, POST} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/venues/:id, PUT} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/venues/:id, DELETE} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RoutesResolver] CategoriesController {/api/categories}: +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/categories, GET} route +1ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/categories/:id, GET} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/categories, POST} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/categories/:id, PUT} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RoutesResolver] OrdersController {/api/orders}: +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/orders, POST} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/orders, GET} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/orders/:id, GET} route +1ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RoutesResolver] TicketsController {/api/tickets}: +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/tickets/:id, GET} route +0ms
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [RouterExplorer] Mapped {/api/tickets/:id, PUT} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [NestFactory] Starting Nest application...
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +81ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] PassportModule dependencies initialized +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] JwtModule dependencies initialized +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] TypeOrmCoreModule dependencies initialized +200ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +1ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] AppModule dependencies initialized +1ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] AuthModule dependencies initialized +1ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] EventModule dependencies initialized +1ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] UsersModule dependencies initialized +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] VenuesModule dependencies initialized +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] CategoriesModule dependencies initialized +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] OrdersModule dependencies initialized +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [InstanceLoader] TicketsModule dependencies initialized +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RoutesResolver] AppController {/api}: +31ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api, GET} route +2ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RoutesResolver] EventController {/api/events}: +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/events, GET} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/events/:id, GET} route +1ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/events, POST} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/events/:id, PUT} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/events/:id, DELETE} route +1ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RoutesResolver] AuthController {/api/auth}: +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/auth/register, POST} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/auth/login, POST} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RoutesResolver] UsersController {/api/users}: +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/users, GET} route +1ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/users/:id, GET} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/users/:id, PUT} route +1ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/users/:id/orders, GET} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RoutesResolver] VenuesController {/api/venues}: +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/venues, GET} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/venues/:id, GET} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/venues, POST} route +1ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/venues/:id, PUT} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/venues/:id, DELETE} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RoutesResolver] CategoriesController {/api/categories}: +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/categories, GET} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/categories/:id, GET} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/categories, POST} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/categories/:id, PUT} route +1ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RoutesResolver] OrdersController {/api/orders}: +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/orders, POST} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/orders, GET} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/orders/:id, GET} route +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RoutesResolver] TicketsController {/api/tickets}: +0ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/tickets/:id, GET} route +1ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [RouterExplorer] Mapped {/api/tickets/:id, PUT} route +0ms
 🌱 Starting database seeding...
 Creating users...
 ✓ Users created
@@ -77,7 +77,7 @@ Organizer 1: organizer1@eventpass.com / password123
 Organizer 2: organizer2@eventpass.com / password123
 Client 1: client1@example.com / password123
 Client 2: client2@example.com / password123
-[Nest] 54809  - 11/04/2025, 3:23:40 PM     LOG [NestApplication] Nest application successfully started +114ms
+[Nest] 61740  - 11/04/2025, 4:42:24 PM     LOG [NestApplication] Nest application successfully started +165ms
 
 🚀 ================================
    EventPass API - READY
@@ -86,4 +86,3 @@ Client 2: client2@example.com / password123
    📚 Swagger Docs: http://localhost:3000/api/docs
    ================================
 
- ELIFECYCLE  Command failed.
