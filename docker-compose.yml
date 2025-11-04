@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   # PostgreSQL Database
@@ -85,4 +85,3 @@ volumes:
     driver: local
   backend_logs:
     driver: local
-
