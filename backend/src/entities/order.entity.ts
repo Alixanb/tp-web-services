@@ -6,6 +6,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Ticket } from './ticket.entity';
 import { User } from './user.entity';
@@ -23,8 +24,8 @@ export class Order {
   @Column()
   userId: string;
 
-  @Column('decimal', { precision: 10, scale: 2 })
-  totalPrice: number;
+  @CreateDateColumn()
+  orderDate: Date;
 
   @Column({
     type: 'enum',
@@ -33,9 +34,15 @@ export class Order {
   })
   status: OrderStatus;
 
+  @Column('decimal', { precision: 10, scale: 2 })
+  totalAmount: number;
+
   @OneToMany(() => Ticket, (ticket) => ticket.order)
   tickets: Ticket[];
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

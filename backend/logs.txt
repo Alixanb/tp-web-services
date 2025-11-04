@@ -1,0 +1,105 @@
+
+> back-end@0.0.1 start:dev /Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend
+> nest start --watch
+
+[2J[3J[H[[90m3:21:43 PM[0m] Starting compilation in watch mode...
+
+[[90m3:21:47 PM[0m] Found 0 errors. Watching for file changes.
+
+[Nest] 54323  - 11/04/2025, 3:21:48 PM     LOG [NestFactory] Starting Nest application...
+[Nest] 54323  - 11/04/2025, 3:21:48 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +62ms
+[Nest] 54323  - 11/04/2025, 3:21:48 PM     LOG [InstanceLoader] PassportModule dependencies initialized +0ms
+[Nest] 54323  - 11/04/2025, 3:21:48 PM     LOG [InstanceLoader] JwtModule dependencies initialized +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [InstanceLoader] TypeOrmCoreModule dependencies initialized +201ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +1ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [InstanceLoader] AppModule dependencies initialized +1ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [InstanceLoader] AuthModule dependencies initialized +1ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [InstanceLoader] EventModule dependencies initialized +1ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [InstanceLoader] UsersModule dependencies initialized +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [InstanceLoader] VenuesModule dependencies initialized +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [InstanceLoader] CategoriesModule dependencies initialized +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [InstanceLoader] OrdersModule dependencies initialized +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [InstanceLoader] TicketsModule dependencies initialized +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RoutesResolver] AppController {/api}: +27ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api, GET} route +2ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RoutesResolver] EventController {/api/events}: +1ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/events, GET} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/events/:id, GET} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/events, POST} route +1ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/events/:id, PUT} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/events/:id, DELETE} route +1ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RoutesResolver] AuthController {/api/auth}: +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/auth/register, POST} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/auth/login, POST} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RoutesResolver] UsersController {/api/users}: +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/users, GET} route +1ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/users/:id, GET} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/users/:id, PUT} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/users/:id/orders, GET} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RoutesResolver] VenuesController {/api/venues}: +1ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/venues, GET} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/venues/:id, GET} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/venues, POST} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/venues/:id, PUT} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/venues/:id, DELETE} route +1ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RoutesResolver] CategoriesController {/api/categories}: +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/categories, GET} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/categories/:id, GET} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/categories, POST} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/categories/:id, PUT} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RoutesResolver] OrdersController {/api/orders}: +1ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/orders, POST} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/orders, GET} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/orders/:id, GET} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RoutesResolver] TicketsController {/api/tickets}: +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/tickets/:id, GET} route +0ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [RouterExplorer] Mapped {/api/tickets/:id, PUT} route +1ms
+🌱 Starting database seeding...
+Creating users...
+✓ Users created
+Creating categories...
+✓ Categories created
+Creating venues...
+✓ Venues created
+Creating events...
+✓ Events created
+
+✅ Database seeding completed!
+
+📧 Test accounts created:
+Admin: admin@eventpass.com / password123
+Organizer 1: organizer1@eventpass.com / password123
+Organizer 2: organizer2@eventpass.com / password123
+Client 1: client1@example.com / password123
+Client 2: client2@example.com / password123
+[Nest] 54323  - 11/04/2025, 3:21:49 PM     LOG [NestApplication] Nest application successfully started +149ms
+[Nest] 54323  - 11/04/2025, 3:21:49 PM   ERROR [NestApplication] Error: listen EADDRINUSE: address already in use :::3000 +2ms
+node:internal/errors:496
+    ErrorCaptureStackTrace(err);
+    ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at __node_internal_captureLargerStackTrace (node:internal/errors:496:5)
+    at __node_internal_uvExceptionWithHostPort (node:internal/errors:593:12)
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at ExpressAdapter.listen (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/@nestjs+platform-express@10.4.20_@nestjs+common@10.4.20_class-transformer@0.5.1_class-v_cd252036683558c8e092e5ab8d217a0d/node_modules/@nestjs/platform-express/adapters/express-adapter.js:95:32)
+    at /Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/@nestjs+core@10.4.20_@nestjs+common@10.4.20_class-transformer@0.5.1_class-validator@0.1_50182a808b7b5eee0e7c4810d24dc688/node_modules/@nestjs/core/nest-application.js:183:30
+    at new Promise (<anonymous>)
+    at NestApplication.listen (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/@nestjs+core@10.4.20_@nestjs+common@10.4.20_class-transformer@0.5.1_class-validator@0.1_50182a808b7b5eee0e7c4810d24dc688/node_modules/@nestjs/core/nest-application.js:173:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at bootstrap (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/src/main.ts:63:3) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v18.20.8

@@ -1,4 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Event } from './event.entity';
 
 @Entity('categories')
@@ -9,9 +16,18 @@ export class Category {
   @Column({ unique: true })
   name: string;
 
+  @Column('text', { nullable: true })
+  description?: string;
+
   @Column({ nullable: true })
-  description: string;
+  icon?: string;
 
   @OneToMany(() => Event, (event) => event.category)
   events: Event[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
