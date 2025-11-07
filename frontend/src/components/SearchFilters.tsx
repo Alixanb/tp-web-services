@@ -1,4 +1,3 @@
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { categoryService } from '@/services/category.service'
@@ -85,11 +84,10 @@ export function SearchFilters({
                   key={category.id}
                   type="button"
                   onClick={() => toggleCategory(category.id)}
-                  className={`px-5 py-4 rounded-md text-base transition-colors text-center border cursor-pointer ${
-                    isSelected
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-background hover:bg-muted'
-                  }`}
+                  className={`px-5 py-2 rounded-xl text-base transition-colors text-center border cursor-pointer ${isSelected
+                    ? 'bg-primary text-primary-foreground'
+                    : 'bg-background hover:bg-muted'
+                    }`}
                 >
                   {category.name}
                 </button>
@@ -103,25 +101,6 @@ export function SearchFilters({
             </Button>
           )}
         </div>
-
-        {selectedCategoryIds.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {selectedCategoryIds.map((categoryId) => {
-              const category = categories.find((c) => c.id === categoryId)
-              return (
-                <Badge
-                  key={categoryId}
-                  variant="secondary"
-                  className="cursor-pointer"
-                  onClick={() => toggleCategory(categoryId)}
-                >
-                  {category?.name || categoryId}
-                  <X className="h-3 w-3 ml-1" />
-                </Badge>
-              )
-            })}
-          </div>
-        )}
       </div>
     </div>
   )

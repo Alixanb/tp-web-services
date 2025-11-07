@@ -24,7 +24,7 @@ import { seedDatabase } from './database/seed';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
       logging: false,
-      dropSchema: true,
+      dropSchema: false,
     }),
     EventModule,
     AuthModule,
