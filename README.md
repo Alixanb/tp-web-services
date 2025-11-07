@@ -19,6 +19,7 @@ cd tp-web-services
 ./start.sh
 ```
 
+- Le script coupe les éventuels processus sur les ports 3000 et 5173, reconstruit les conteneurs si besoin puis lance Docker Compose.
 - Le backend, le frontend et PostgreSQL démarrent simultanément.
 - Attendre ~30 secondes que la base soit seedée.
 - Accès ensuite à :
@@ -37,6 +38,9 @@ cd tp-web-services
 ```bash
 ./reset.sh
 ```
+
+- Supprime les conteneurs, les volumes et reconstruit l’ensemble avant de relancer Docker Compose.
+- À utiliser uniquement si l’on veut repartir sur une base de données vide et regénérée.
 
 ## Mode développement (sans Docker)
 
