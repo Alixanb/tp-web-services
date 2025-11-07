@@ -11,10 +11,12 @@ import {
 import { Input } from '@/components/ui/input'
 import { Loader } from '@/components/ui/loader'
 import { ApiError } from '@/lib/api-client'
+import { categoryService } from '@/services/category.service'
 import { eventService } from '@/services/event.service'
 import { orderService } from '@/services/order.service'
 import { userService } from '@/services/user.service'
 import { venueService } from '@/services/venue.service'
+import type { Category } from '@/types/Category'
 import type { Event, EventStatus, UpdateEventDto } from '@/types/Event'
 import type { Order } from '@/types/Order'
 import type { User } from '@/types/User'
@@ -26,6 +28,7 @@ import {
   MapPin,
   Plus,
   RefreshCw,
+  Tag,
   Trash2,
   TrendingUp,
   Users,
@@ -55,6 +58,7 @@ export function AdminDashboard() {
   const [users, setUsers] = useState<User[]>([])
   const [events, setEvents] = useState<Event[]>([])
   const [venues, setVenues] = useState<Venue[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
   const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(false)
   const [hasLoaded, setHasLoaded] = useState(false)
@@ -72,22 +76,53 @@ export function AdminDashboard() {
     endDate: '',
     status: 'DRAFT' as EventStatus,
   })
+  const [categoryDialogOpen, setCategoryDialogOpen] = useState(false)
+  const [venueDialogOpen, setVenueDialogOpen] = useState(false)
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
+  const [selectedVenue, setSelectedVenue] = useState<Venue | null>(null)
+  const [categoryForm, setCategoryForm] = useState({
+    name: '',
+    description: '',
+    icon: '',
+  })
+  const [venueForm, setVenueForm] = useState({
+    name: '',
+    address: '',
+    city: '',
+    postalCode: '',
+    country: '',
+    capacity: '',
+    description: '',
+  })
+  const [savingCategory, setSavingCategory] = useState(false)
+  const [savingVenue, setSavingVenue] = useState(false)
+  const [categoryError, setCategoryError] = useState<string | null>(null)
+  const [venueError, setVenueError] = useState<string | null>(null)
+  const [deletingCategoryId, setDeletingCategoryId] = useState<string | null>(null)
+  const [deletingVenueId, setDeletingVenueId] = useState<string | null>(null)
   const navigate = useNavigate()
 
-  const retrieveDashboard = useCallback(async () => {
+  const loadDashboardData = useCallback(async () => {
     setLoading(true)
     setError(null)
     try {
-      const [fetchedUsers, fetchedEvents, fetchedVenues, fetchedOrders] =
-        await Promise.all([
-          userService.getAllUsers(),
-          eventService.getEvents({ includeAllStatuses: true }),
-          venueService.getVenues(),
-          orderService.getAllOrders(),
-        ])
+      const [
+        fetchedUsers,
+        fetchedEvents,
+        fetchedVenues,
+        fetchedCategories,
+        fetchedOrders,
+      ] = await Promise.all([
+        userService.getAllUsers(),
+        eventService.getEvents({ includeAllStatuses: true }),
+        venueService.getVenues(),
+        categoryService.getCategories(),
+        orderService.getAllOrders(),
+      ])
       setUsers(fetchedUsers)
       setEvents(fetchedEvents)
       setVenues(fetchedVenues)
+      setCategories(fetchedCategories)
       setOrders(fetchedOrders)
       setHasLoaded(true)
     } catch (err) {
@@ -99,8 +134,8 @@ export function AdminDashboard() {
   }, [])
 
   useEffect(() => {
-    retrieveDashboard()
-  }, [retrieveDashboard])
+    loadDashboardData()
+  }, [loadDashboardData])
 
   const totalRevenue = useMemo(
     () => orders.reduce((sum, order) => sum + (order.totalAmount || 0), 0),
@@ -144,6 +179,11 @@ export function AdminDashboard() {
       label: 'Utilisateurs',
       value: users.length.toLocaleString('fr-FR'),
       icon: Users,
+    },
+    {
+      label: 'Catégories actives',
+      value: categories.length.toLocaleString('fr-FR'),
+      icon: Tag,
     },
     {
       label: 'Événements publiés',
@@ -326,6 +366,225 @@ export function AdminDashboard() {
     }
   }
 
+  const openCategoryDialog = (category?: Category) => {
+    setSelectedCategory(category ?? null)
+    setCategoryError(null)
+    setCategoryForm({
+      name: category?.name ?? '',
+      description: category?.description ?? '',
+      icon: category?.icon ?? '',
+    })
+    setCategoryDialogOpen(true)
+  }
+
+  const closeCategoryDialog = () => {
+    setCategoryDialogOpen(false)
+    setSelectedCategory(null)
+    setCategoryError(null)
+    setCategoryForm({ name: '', description: '', icon: '' })
+  }
+
+  const handleCategoryDialogToggle = (open: boolean) => {
+    if (!open) {
+      closeCategoryDialog()
+    } else {
+      setCategoryDialogOpen(true)
+    }
+  }
+
+  const handleCategoryFieldChange = (
+    field: 'name' | 'description' | 'icon',
+    value: string
+  ) => {
+    setCategoryForm((current) => ({ ...current, [field]: value }))
+  }
+
+  const submitCategoryForm = async () => {
+    if (!categoryForm.name.trim()) {
+      setCategoryError('Le nom est requis.')
+      return
+    }
+    setSavingCategory(true)
+    setCategoryError(null)
+    try {
+      const payload = {
+        name: categoryForm.name.trim(),
+        description: categoryForm.description.trim() || undefined,
+        icon: categoryForm.icon.trim() || undefined,
+      }
+      if (selectedCategory) {
+        const updated = await categoryService.updateCategory(selectedCategory.id, payload)
+        setCategories((current) =>
+          current.map((categoryItem) =>
+            categoryItem.id === selectedCategory.id ? { ...categoryItem, ...updated } : categoryItem
+          )
+        )
+      } else {
+        const created = await categoryService.createCategory(payload)
+        setCategories((current) => [...current, created])
+      }
+      closeCategoryDialog()
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setCategoryError(err.message)
+      } else {
+        setCategoryError('Enregistrement impossible.')
+      }
+    } finally {
+      setSavingCategory(false)
+    }
+  }
+
+  const handleDeleteCategory = async (categoryId: string) => {
+    const targetedCategory = categories.find((categoryItem) => categoryItem.id === categoryId)
+    if (!targetedCategory) {
+      return
+    }
+    const confirmation = window.confirm(
+      `Supprimer définitivement « ${targetedCategory.name} » ?`
+    )
+    if (!confirmation) {
+      return
+    }
+    setDeletingCategoryId(categoryId)
+    try {
+      await categoryService.deleteCategory(categoryId)
+      setCategories((current) => current.filter((categoryItem) => categoryItem.id !== categoryId))
+    } catch (err) {
+      console.error('Erreur lors de la suppression de la catégorie:', err)
+      if (err instanceof ApiError) {
+        alert(err.message)
+      } else {
+        alert('Suppression impossible.')
+      }
+    } finally {
+      setDeletingCategoryId(null)
+    }
+  }
+
+  const openVenueDialog = (venue?: Venue) => {
+    setSelectedVenue(venue ?? null)
+    setVenueError(null)
+    setVenueForm({
+      name: venue?.name ?? '',
+      address: venue?.address ?? '',
+      city: venue?.city ?? '',
+      postalCode: venue?.postalCode ?? '',
+      country: venue?.country ?? '',
+      capacity: venue?.capacity ? String(venue.capacity) : '',
+      description: venue?.description ?? '',
+    })
+    setVenueDialogOpen(true)
+  }
+
+  const closeVenueDialog = () => {
+    setVenueDialogOpen(false)
+    setSelectedVenue(null)
+    setVenueError(null)
+    setVenueForm({
+      name: '',
+      address: '',
+      city: '',
+      postalCode: '',
+      country: '',
+      capacity: '',
+      description: '',
+    })
+  }
+
+  const handleVenueDialogToggle = (open: boolean) => {
+    if (!open) {
+      closeVenueDialog()
+    } else {
+      setVenueDialogOpen(true)
+    }
+  }
+
+  const handleVenueFieldChange = (
+    field: 'name' | 'address' | 'city' | 'postalCode' | 'country' | 'capacity' | 'description',
+    value: string
+  ) => {
+    setVenueForm((current) => ({ ...current, [field]: value }))
+  }
+
+  const submitVenueForm = async () => {
+    if (
+      !venueForm.name.trim() ||
+      !venueForm.address.trim() ||
+      !venueForm.city.trim() ||
+      !venueForm.postalCode.trim() ||
+      !venueForm.country.trim()
+    ) {
+      setVenueError('Tous les champs obligatoires doivent être renseignés.')
+      return
+    }
+    const numericCapacity = Number(venueForm.capacity)
+    if (!Number.isFinite(numericCapacity) || numericCapacity <= 0) {
+      setVenueError('La capacité doit être un nombre positif.')
+      return
+    }
+    setSavingVenue(true)
+    setVenueError(null)
+    try {
+      const payload = {
+        name: venueForm.name.trim(),
+        address: venueForm.address.trim(),
+        city: venueForm.city.trim(),
+        postalCode: venueForm.postalCode.trim(),
+        country: venueForm.country.trim(),
+        capacity: numericCapacity,
+        description: venueForm.description.trim() || undefined,
+      }
+      if (selectedVenue) {
+        const updated = await venueService.updateVenue(selectedVenue.id, payload)
+        setVenues((current) =>
+          current.map((venueItem) =>
+            venueItem.id === selectedVenue.id ? { ...venueItem, ...updated } : venueItem
+          )
+        )
+      } else {
+        const created = await venueService.createVenue(payload)
+        setVenues((current) => [...current, created])
+      }
+      closeVenueDialog()
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setVenueError(err.message)
+      } else {
+        setVenueError('Enregistrement impossible.')
+      }
+    } finally {
+      setSavingVenue(false)
+    }
+  }
+
+  const handleDeleteVenue = async (venueId: string) => {
+    const targetedVenue = venues.find((venueItem) => venueItem.id === venueId)
+    if (!targetedVenue) {
+      return
+    }
+    const confirmation = window.confirm(
+      `Supprimer définitivement « ${targetedVenue.name} » ?`
+    )
+    if (!confirmation) {
+      return
+    }
+    setDeletingVenueId(venueId)
+    try {
+      await venueService.deleteVenue(venueId)
+      setVenues((current) => current.filter((venueItem) => venueItem.id !== venueId))
+    } catch (err) {
+      console.error('Erreur lors de la suppression du lieu:', err)
+      if (err instanceof ApiError) {
+        alert(err.message)
+      } else {
+        alert('Suppression impossible.')
+      }
+    } finally {
+      setDeletingVenueId(null)
+    }
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="space-y-8">
@@ -343,7 +602,7 @@ export function AdminDashboard() {
             </Button>
             <Button
               variant="outline"
-              onClick={retrieveDashboard}
+              onClick={loadDashboardData}
               disabled={loading}
             >
               <RefreshCw className="h-4 w-4" />
@@ -468,7 +727,7 @@ export function AdminDashboard() {
                               </select>
                             </td>
                             <td className="py-3 pr-4">
-                              <div className="flex flex-wrap gap-2">
+                              <div className="flex gap-2">
                                 <Button
                                   size="sm"
                                   variant="outline"
@@ -582,6 +841,183 @@ export function AdminDashboard() {
             </Card>
           </div>
         </div>
+
+        <div className="grid gap-4 lg:grid-cols-2">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Catégories</CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Gestion des thèmes et segments d'événements
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge variant="secondary">
+                  {categories.length.toLocaleString('fr-FR')}
+                </Badge>
+                <Button size="sm" onClick={() => openCategoryDialog()}>
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {loading && !hasLoaded ? (
+                <div className="py-4 text-center text-sm text-muted-foreground">
+                  Chargement...
+                </div>
+              ) : categories.length === 0 ? (
+                <div className="py-4 text-center text-sm text-muted-foreground">
+                  Aucune catégorie enregistrée.
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm">
+                    <thead className="text-xs uppercase text-muted-foreground">
+                      <tr>
+                        <th className="py-3 pr-4 font-medium">Nom</th>
+                        <th className="py-3 pr-4 font-medium">Icône</th>
+                        <th className="py-3 pr-4 font-medium w-4">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border/60">
+                      {categories.map((category) => (
+                        <tr key={category.id} className="align-top">
+                          <td className="py-3 pr-4">
+                            <div className="font-medium">{category.name}</div>
+                            {category.description ? (
+                              <div className="text-xs text-muted-foreground">
+                                {category.description}
+                              </div>
+                            ) : null}
+                          </td>
+                          <td className="py-3 pr-4">
+                            <div className="text-sm text-muted-foreground">
+                              {category.icon || 'N/A'}
+                            </div>
+                          </td>
+                          <td className="py-3 pr-4">
+                            <div className="flex flex-wrap gap-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => openCategoryDialog(category)}
+                              >
+                                <Edit />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={() => handleDeleteCategory(category.id)}
+                                disabled={deletingCategoryId === category.id}
+                              >
+                                {deletingCategoryId === category.id ? (
+                                  <Loader size="small" variant="white" />
+                                ) : (
+                                  <Trash2 />
+                                )}
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div>
+                <CardTitle>Lieux</CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Administration des espaces disponibles
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge variant="secondary">
+                  {venues.length.toLocaleString('fr-FR')}
+                </Badge>
+                <Button size="sm" onClick={() => openVenueDialog()}>
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {loading && !hasLoaded ? (
+                <div className="py-4 text-center text-sm text-muted-foreground">
+                  Chargement...
+                </div>
+              ) : venues.length === 0 ? (
+                <div className="py-4 text-center text-sm text-muted-foreground">
+                  Aucun lieu enregistré.
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm">
+                    <thead className="text-xs uppercase text-muted-foreground">
+                      <tr>
+                        <th className="py-3 pr-4 font-medium">Nom</th>
+                        <th className="py-3 pr-4 font-medium">Ville</th>
+                        <th className="py-3 pr-4 font-medium">Capacité</th>
+                        <th className="py-3 pr-4 font-medium w-4">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border/60">
+                      {venues.map((venue) => (
+                        <tr key={venue.id} className="align-top">
+                          <td className="py-3 pr-4">
+                            <div className="font-medium">{venue.name}</div>
+                            {venue.address ? (
+                              <div className="text-xs text-muted-foreground">
+                                {venue.address}
+                              </div>
+                            ) : null}
+                          </td>
+                          <td className="py-3 pr-4">
+                            <div className="font-medium">{venue.city}</div>
+                            <div className="text-xs text-muted-foreground">
+                              {venue.postalCode} {venue.country}
+                            </div>
+                          </td>
+                          <td className="py-3 pr-4">
+                            <div className="font-medium">
+                              {venue.capacity.toLocaleString('fr-FR')}
+                            </div>
+                          </td>
+                          <td className="py-3 pr-4">
+                            <div className="flex flex-wrap gap-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => openVenueDialog(venue)}
+                              >
+                                <Edit />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={() => handleDeleteVenue(venue.id)}
+                                disabled={deletingVenueId === venue.id}
+                              >
+                                {deletingVenueId === venue.id ? (
+                                  <Loader size="small" variant="white" />
+                                ) : (
+                                  <Trash2 />
+                                )}
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       <Dialog open={editDialogOpen} onOpenChange={handleEditDialogToggle}>
@@ -669,6 +1105,171 @@ export function AdminDashboard() {
               disabled={savingEdit || editForm.title.trim().length === 0}
             >
               {savingEdit ? 'Enregistrement...' : 'Enregistrer'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={categoryDialogOpen} onOpenChange={handleCategoryDialogToggle}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {selectedCategory ? 'Modifier la catégorie' : 'Créer une catégorie'}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {categoryError && <p className="text-sm text-destructive">{categoryError}</p>}
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="category-name">
+                Nom
+              </label>
+              <Input
+                id="category-name"
+                value={categoryForm.name}
+                onChange={(evt) => handleCategoryFieldChange('name', evt.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="category-icon">
+                Icône
+              </label>
+              <Input
+                id="category-icon"
+                value={categoryForm.icon}
+                onChange={(evt) => handleCategoryFieldChange('icon', evt.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="category-description">
+                Description
+              </label>
+              <textarea
+                id="category-description"
+                value={categoryForm.description}
+                onChange={(evt) => handleCategoryFieldChange('description', evt.target.value)}
+                className="min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={closeCategoryDialog} disabled={savingCategory}>
+              Annuler
+            </Button>
+            <Button
+              onClick={submitCategoryForm}
+              disabled={savingCategory || categoryForm.name.trim().length === 0}
+            >
+              {savingCategory ? 'Enregistrement...' : 'Enregistrer'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={venueDialogOpen} onOpenChange={handleVenueDialogToggle}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {selectedVenue ? 'Modifier le lieu' : 'Créer un lieu'}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {venueError && <p className="text-sm text-destructive">{venueError}</p>}
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="venue-name">
+                Nom
+              </label>
+              <Input
+                id="venue-name"
+                value={venueForm.name}
+                onChange={(evt) => handleVenueFieldChange('name', evt.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="venue-address">
+                Adresse
+              </label>
+              <Input
+                id="venue-address"
+                value={venueForm.address}
+                onChange={(evt) => handleVenueFieldChange('address', evt.target.value)}
+              />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <label className="text-sm font-medium" htmlFor="venue-city">
+                  Ville
+                </label>
+                <Input
+                  id="venue-city"
+                  value={venueForm.city}
+                  onChange={(evt) => handleVenueFieldChange('city', evt.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium" htmlFor="venue-postal">
+                  Code postal
+                </label>
+                <Input
+                  id="venue-postal"
+                  value={venueForm.postalCode}
+                  onChange={(evt) => handleVenueFieldChange('postalCode', evt.target.value)}
+                />
+              </div>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <label className="text-sm font-medium" htmlFor="venue-country">
+                  Pays
+                </label>
+                <Input
+                  id="venue-country"
+                  value={venueForm.country}
+                  onChange={(evt) => handleVenueFieldChange('country', evt.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-medium" htmlFor="venue-capacity">
+                  Capacité
+                </label>
+                <Input
+                  id="venue-capacity"
+                  type="number"
+                  min={1}
+                  value={venueForm.capacity}
+                  onChange={(evt) => handleVenueFieldChange('capacity', evt.target.value)}
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="venue-description">
+                Description
+              </label>
+              <textarea
+                id="venue-description"
+                value={venueForm.description}
+                onChange={(evt) => handleVenueFieldChange('description', evt.target.value)}
+                className="min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={closeVenueDialog} disabled={savingVenue}>
+              Annuler
+            </Button>
+            <Button
+              onClick={submitVenueForm}
+              disabled={
+                savingVenue ||
+                !venueForm.name.trim() ||
+                !venueForm.address.trim() ||
+                !venueForm.city.trim() ||
+                !venueForm.postalCode.trim() ||
+                !venueForm.country.trim() ||
+                Number(venueForm.capacity) <= 0 ||
+                Number.isNaN(Number(venueForm.capacity))
+              }
+            >
+              {savingVenue ? 'Enregistrement...' : 'Enregistrer'}
             </Button>
           </DialogFooter>
         </DialogContent>
