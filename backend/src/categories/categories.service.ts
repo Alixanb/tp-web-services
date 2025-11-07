@@ -1,11 +1,12 @@
 import {
+  BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
-  ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Category } from 'src/entities/category.entity';
+import { Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 
@@ -48,5 +49,24 @@ export class CategoriesService {
     const category = await this.findOne(id);
     Object.assign(category, updateCategoryDto);
     return this.categoryRepository.save(category);
+  }
+
+  async remove(id: string): Promise<void> {
+    const category = await this.categoryRepository.findOne({
+      where: { id },
+      relations: ['events'],
+    });
+
+    if (!category) {
+      throw new NotFoundException('Category not found');
+    }
+
+    if (category.events && category.events.length > 0) {
+      throw new BadRequestException(
+        'Cannot delete category with associated events',
+      );
+    }
+
+    await this.categoryRepository.remove(category);
   }
 }
