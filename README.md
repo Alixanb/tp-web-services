@@ -1,3 +1,5 @@
+lien du git : https://github.com/Alixanb/tp-web-services
+
 # EventPass - Plateforme de Billetterie
 
 EventPass est une application web complète pour créer, publier et vendre des événements en ligne. Elle comprend une API NestJS, un front React et une base PostgreSQL déjà peuplée avec des données cohérentes.
