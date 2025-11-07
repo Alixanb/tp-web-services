@@ -1,228 +1,118 @@
-# 🎉 EventPass - Plateforme de Billetterie
+# EventPass - Plateforme de Billetterie
 
-API REST complète et application web pour la gestion d'événements et la vente de billets.
+EventPass est une application web complète pour créer, publier et vendre des événements en ligne. Elle comprend une API NestJS, un front React et une base PostgreSQL déjà peuplée avec des données cohérentes.
 
-## 🚀 Quick Start avec Docker
+## Comment lancer rapidement le projet
 
-### Prérequis
-- Docker Desktop installé ([Download](https://www.docker.com/products/docker-desktop))
-- Docker Compose (inclus avec Docker Desktop)
-
-### Démarrage rapide
+### 1. Préparer son environnement
+- Installer [Docker Desktop](https://www.docker.com/products/docker-desktop).
+- Cloner ce dépôt puis se placer dans le dossier `tp-web-services` :
 
 ```bash
-# Cloner le projet
+git clone <url-du-repo>
 cd tp-web-services
-
-# Lancer toute l'application (Backend + Frontend + PostgreSQL)
-docker-compose up -d
-
-# Attendre 30 secondes que tout se lance...
-# Puis accéder à:
-# - Frontend: http://localhost:5173
-# - Backend API: http://localhost:3000/api
-# - Swagger: http://localhost:3000/api/docs
 ```
 
-### Arrêter l'application
+### 2. Démarrer toute la stack en un clic
 
 ```bash
-docker-compose down
+./start.sh
 ```
 
-### Redémarrer avec reset de la BDD
+- Le backend, le frontend et PostgreSQL démarrent simultanément.
+- Attendre ~30 secondes que la base soit seedée.
+- Accès ensuite à :
+  - Frontend : http://localhost:5173
+  - API REST : http://localhost:3000/api
+  - Swagger : http://localhost:3000/api/docs
+
+### 3. Arrêter proprement
 
 ```bash
-# Arrêter et supprimer les volumes (données)
-docker-compose down -v
-
-# Relancer (la BDD sera reseedée automatiquement)
-docker-compose up -d
+./stop.sh
 ```
 
-## 📦 Commandes Docker utiles
+### 4. Repartir de zéro (reset base + rebuild)
 
 ```bash
-# Voir les logs
-docker-compose logs -f
-
-# Logs backend uniquement
-docker-compose logs -f backend
-
-# Logs frontend uniquement
-docker-compose logs -f frontend
-
-# Voir les conteneurs actifs
-docker-compose ps
-
-# Reconstruire les images
-docker-compose build
-
-# Redémarrer un service spécifique
-docker-compose restart backend
+./reset.sh
 ```
 
-## 🔧 Mode Développement (sans Docker)
+## Mode développement (sans Docker)
 
 ### Backend
-
 ```bash
 cd backend
-
-# Installer les dépendances
 pnpm install
-
-# Créer la base de données PostgreSQL
 createdb eventpass
-
-# Démarrer
-./start-backend.sh
-# ou
-pnpm start:dev
+pnpm start:dev   # ou ./start-backend.sh
 ```
 
 ### Frontend
-
 ```bash
 cd frontend
-
-# Installer les dépendances
 pnpm install
-
-# Démarrer
 pnpm dev
 ```
 
-## 🌐 URLs
+## Comptes de test pré-créés
 
-| Service | URL | Description |
-|---------|-----|-------------|
-| **Frontend** | http://localhost:5173 | Application React |
-| **Backend API** | http://localhost:3000/api | API REST |
-| **Swagger** | http://localhost:3000/api/docs | Documentation interactive |
-| **PostgreSQL** | localhost:5432 | Base de données |
+| Rôle      | Email                     | Mot de passe  |
+|-----------|---------------------------|---------------|
+| Admin     | admin@eventpass.com       | password123   |
+| Organisateur | organizer1@eventpass.com | password123   |
+| Client    | client1@example.com       | password123   |
 
-## 🔑 Comptes de test
+## Endpoints et URLs utiles
 
-Les comptes sont créés automatiquement au démarrage :
+| Service        | URL                           | Description                  |
+|----------------|-------------------------------|------------------------------|
+| Frontend       | http://localhost:5173         | Application React            |
+| API REST       | http://localhost:3000/api     | Endpoints NestJS             |
+| Swagger        | http://localhost:3000/api/docs| Documentation & tests rapides|
+| PostgreSQL     | localhost:5432                | Base de données seedée       |
 
-| Rôle | Email | Password |
-|------|-------|----------|
-| Admin | `admin@eventpass.com` | `password123` |
-| Organizer | `organizer1@eventpass.com` | `password123` |
-| Client | `client1@example.com` | `password123` |
+## Ce que nous avons livré (et comment)
 
-## 📊 Architecture
+- **Code source versionné sur Git** : branches thématiques + commits fréquents avec messages explicites retraçant chaque évolution (features, fix, docs).
+- **Minimum 15 endpoints métier** : 25 routes REST exposées couvrant événements, billets, commandes, utilisateurs et catégories (cf. `backend/ENDPOINTS_CHECKLIST.md`).
+- **CRUD complet sur 4 entités** : opérations Create/Read/Update/Delete opérationnelles pour `events`, `venues`, `categories` et `tickets` via services NestJS + controllers.
+- **Authentification de base** : login JWT avec NestJS Passport, guard `JwtAuthGuard` et rôles Admin/Organisateur/Client appliqués aux routes sensibles.
+- **Recherche & filtrage avancés** : endpoints `/events` et `/orders` acceptent filtres (dates, statut, catégories, texte libre) + pagination côté backend.
+- **Validation robuste & gestion d'erreurs** : DTO validés par `class-validator`, réponses normalisées, `ApiError` côté frontend pour afficher des messages clairs.
+- **Collection Swagger complète** : doc auto-générée disponible sur `/api/docs` + collection Postman `EventPass_API.postman_collection.json` contenant des tests pour tous les endpoints.
+- **Base de données réaliste** : seeds PostgreSQL dans `backend/src/database/seed.ts` (événements variés, utilisateurs, billets, commandes cohérentes).
 
+## Architecture du dépôt
 ```
 tp-web-services/
-├── backend/           # API NestJS
-│   ├── src/
-│   ├── Dockerfile
-│   └── .env
-├── frontend/          # React + Vite
-│   ├── src/
-│   ├── Dockerfile
-│   └── nginx.conf
-├── docker-compose.yml          # Dev
-└── docker-compose.prod.yml     # Production
+├── backend/   # API NestJS (TypeORM, Swagger, Auth)
+├── frontend/  # React + Vite + Tailwind
+├── docker-compose.yml         # mode dev
+└── docker-compose.prod.yml    # mode prod
 ```
 
-## 🚀 Déploiement Production
-
+## Déploiement production
 ```bash
-# Build et lancer en mode production
 docker-compose -f docker-compose.prod.yml up -d
-
-# Frontend sera sur le port 80
-# Backend sur le port 3000
+# Frontend servi par Nginx sur le port 80
+# Backend REST accessible sur :3000
 ```
 
-## 🐛 Troubleshooting
+## Stack technique
 
-### Le backend ne démarre pas
+**Backend** : NestJS 10, TypeScript, PostgreSQL 14, TypeORM, JWT, Swagger/OpenAPI
 
-```bash
-# Vérifier les logs
-docker-compose logs backend
+**Frontend** : React 18, TypeScript, Vite, TailwindCSS, React Router
 
-# Redémarrer les services
-docker-compose restart
-```
+**DevOps** : Docker, Docker Compose, Nginx (prod)
 
-### Reset complet
+## Ressources complémentaires
+- [Documentation API détaillée](./backend/API_README.md)
+- [Guide backend pas-à-pas](./backend/GETTING_STARTED.md)
+- [Checklist des endpoints](./backend/ENDPOINTS_CHECKLIST.md)
+- [Collection Postman](./backend/EventPass_API.postman_collection.json)
 
-```bash
-# Tout arrêter et supprimer
-docker-compose down -v
-
-# Supprimer les images
-docker-compose down --rmi all
-
-# Reconstruire et relancer
-docker-compose up -d --build
-```
-
-### Port déjà utilisé
-
-```bash
-# Vérifier quel processus utilise le port 3000
-lsof -ti:3000
-
-# Tuer le processus
-lsof -ti:3000 | xargs kill -9
-
-# Ou changer le port dans docker-compose.yml
-ports:
-  - "3001:3000"  # Au lieu de 3000:3000
-```
-
-## 📚 Documentation
-
-- [Backend API Documentation](./backend/API_README.md)
-- [Getting Started Guide](./backend/GETTING_STARTED.md)
-- [Endpoints Checklist](./backend/ENDPOINTS_CHECKLIST.md)
-- [Postman Collection](./backend/EventPass_API.postman_collection.json)
-
-## ✅ Features
-
-- ✅ 25 endpoints REST
-- ✅ Authentification JWT
-- ✅ Roles-based access control
-- ✅ Recherche et filtrage avancés
-- ✅ Gestion transactionnelle des commandes
-- ✅ Swagger UI intégré
-- ✅ Docker & Docker Compose
-- ✅ Seeding automatique de la BDD
-- ✅ Hot reload en développement
-
-## 🛠️ Stack Technique
-
-**Backend:**
-- NestJS 10
-- TypeScript
-- PostgreSQL 14
-- TypeORM
-- JWT + Passport
-- Swagger/OpenAPI
-
-**Frontend:**
-- React 18
-- TypeScript
-- Vite
-- TailwindCSS
-- React Router
-
-**DevOps:**
-- Docker
-- Docker Compose
-- Nginx (production)
-
-## 📝 License
-
-MIT
-
-## 👥 Équipe
-
-Projet développé dans le cadre du cours de Web Services - M2.
+## Crédit
+Projet réalisé dans le cadre du master Web Services (M2) — équipe Nicolas ARENA, Alixan BALU et Minh NGUYEN
 
