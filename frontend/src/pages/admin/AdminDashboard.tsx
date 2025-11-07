@@ -14,11 +14,13 @@ import { ApiError } from '@/lib/api-client'
 import { categoryService } from '@/services/category.service'
 import { eventService } from '@/services/event.service'
 import { orderService } from '@/services/order.service'
+import { ticketService } from '@/services/ticket.service'
 import { userService } from '@/services/user.service'
 import { venueService } from '@/services/venue.service'
 import type { Category } from '@/types/Category'
 import type { Event, EventStatus, UpdateEventDto } from '@/types/Event'
 import type { Order } from '@/types/Order'
+import type { Ticket } from '@/types/Ticket'
 import type { User } from '@/types/User'
 import type { Venue } from '@/types/Venue'
 import {
@@ -29,9 +31,10 @@ import {
   Plus,
   RefreshCw,
   Tag,
+  Ticket as TicketIcon,
   Trash2,
   TrendingUp,
-  Users,
+  Users
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -100,6 +103,14 @@ export function AdminDashboard() {
   const [venueError, setVenueError] = useState<string | null>(null)
   const [deletingCategoryId, setDeletingCategoryId] = useState<string | null>(null)
   const [deletingVenueId, setDeletingVenueId] = useState<string | null>(null)
+  const [ticketLookupId, setTicketLookupId] = useState('')
+  const [ticketLookupLoading, setTicketLookupLoading] = useState(false)
+  const [ticketLookupError, setTicketLookupError] = useState<string | null>(null)
+  const [ticketResult, setTicketResult] = useState<Ticket | null>(null)
+  const [seatInput, setSeatInput] = useState('')
+  const [seatUpdateError, setSeatUpdateError] = useState<string | null>(null)
+  const [updatingSeat, setUpdatingSeat] = useState(false)
+  const [seatUpdateMessage, setSeatUpdateMessage] = useState<string | null>(null)
   const navigate = useNavigate()
 
   const loadDashboardData = useCallback(async () => {
@@ -596,6 +607,68 @@ export function AdminDashboard() {
     }
   }
 
+  const handleTicketLookup = async () => {
+    const trimmed = ticketLookupId.trim()
+    if (!trimmed) {
+      setTicketLookupError('Identifiant requis.')
+      setTicketResult(null)
+      return
+    }
+    setTicketLookupLoading(true)
+    setTicketLookupError(null)
+    setSeatUpdateError(null)
+    setSeatUpdateMessage(null)
+    try {
+      const ticket = await ticketService.getTicketById(trimmed)
+      setTicketResult(ticket)
+      setSeatInput(ticket.seatNumber || '')
+    } catch (err) {
+      setTicketResult(null)
+      if (err instanceof ApiError) {
+        setTicketLookupError(err.message)
+      } else {
+        setTicketLookupError('Billet introuvable.')
+      }
+    } finally {
+      setTicketLookupLoading(false)
+    }
+  }
+
+  const resetTicketLookup = () => {
+    setTicketLookupId('')
+    setTicketResult(null)
+    setSeatInput('')
+    setTicketLookupError(null)
+    setSeatUpdateError(null)
+    setSeatUpdateMessage(null)
+  }
+
+  const submitSeatUpdate = async () => {
+    if (!ticketResult) {
+      return
+    }
+    setUpdatingSeat(true)
+    setSeatUpdateError(null)
+    setSeatUpdateMessage(null)
+    try {
+      const payload = {
+        seatNumber: seatInput.trim() ? seatInput.trim() : undefined,
+      }
+      const updated = await ticketService.updateTicket(ticketResult.id, payload)
+      setTicketResult(updated)
+      setSeatInput(updated.seatNumber || '')
+      setSeatUpdateMessage('Numéro de place mis à jour.')
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setSeatUpdateError(err.message)
+      } else {
+        setSeatUpdateError('Mise à jour impossible.')
+      }
+    } finally {
+      setUpdatingSeat(false)
+    }
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="space-y-8">
@@ -639,7 +712,7 @@ export function AdminDashboard() {
           </Card>
         )}
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
           {stats.map((stat) => (
             <Card key={stat.label}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -795,6 +868,7 @@ export function AdminDashboard() {
                         <span className="font-medium">{order.user?.email}</span>
                         <span className="text-xs text-muted-foreground">
                           {formatDateTime(order.orderDate)}
+                          {order.id}
                         </span>
                       </div>
                       <div className="mt-2 flex items-center justify-between text-sm">
@@ -907,7 +981,7 @@ export function AdminDashboard() {
                             </div>
                           </td>
                           <td className="py-3 pr-4">
-                            <div className="flex flex-wrap gap-2">
+                            <div className="flex gap-2">
                               <Button
                                 size="sm"
                                 variant="outline"
@@ -998,7 +1072,7 @@ export function AdminDashboard() {
                             </div>
                           </td>
                           <td className="py-3 pr-4">
-                            <div className="flex flex-wrap gap-2">
+                            <div className="flex gap-2">
                               <Button
                                 size="sm"
                                 variant="outline"
@@ -1029,6 +1103,106 @@ export function AdminDashboard() {
             </CardContent>
           </Card>
         </div>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <div>
+              <CardTitle>Gestion des billets</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Recherche et mise à jour du numéro de place
+              </p>
+            </div>
+            <TicketIcon className="h-5 w-5 text-muted-foreground" />
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <Input
+                placeholder="ID du billet"
+                value={ticketLookupId}
+                onChange={(evt) => setTicketLookupId(evt.target.value)}
+                className="sm:max-w-sm"
+              />
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleTicketLookup}
+                  disabled={ticketLookupLoading}
+                >
+                  {ticketLookupLoading ? 'Recherche...' : 'Rechercher'}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={resetTicketLookup}
+                  disabled={
+                    ticketLookupLoading ||
+                    (!ticketResult && !ticketLookupId && !ticketLookupError && !seatInput)
+                  }
+                >
+                  Réinitialiser
+                </Button>
+              </div>
+            </div>
+            {ticketLookupError && (
+              <p className="text-sm text-destructive">{ticketLookupError}</p>
+            )}
+            {ticketResult && (
+              <div className="space-y-4 rounded-lg border border-border/70 p-4">
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="space-y-1 text-sm">
+                    <div className="font-semibold">Événement</div>
+                    <div className="text-muted-foreground">
+                      {ticketResult.event?.title || 'Non défini'}
+                    </div>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <div className="font-semibold">Catégorie</div>
+                    <div className="text-muted-foreground">
+                      {ticketResult.ticketCategoryName}
+                    </div>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <div className="font-semibold">Statut</div>
+                    <Badge variant="outline">{ticketResult.status}</Badge>
+                  </div>
+                  <div className="space-y-1 text-sm">
+                    <div className="font-semibold">Tarif</div>
+                    <div className="text-muted-foreground">
+                      {formatCurrency(ticketResult.price)}
+                    </div>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium" htmlFor="ticket-seat">
+                    Numéro de place
+                  </label>
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                    <Input
+                      id="ticket-seat"
+                      value={seatInput}
+                      onChange={(evt) => {
+                        setSeatInput(evt.target.value)
+                        setSeatUpdateMessage(null)
+                      }}
+                      placeholder="Ex: A12"
+                      className="sm:max-w-xs"
+                    />
+                    <Button
+                      onClick={submitSeatUpdate}
+                      disabled={updatingSeat}
+                    >
+                      {updatingSeat ? 'Enregistrement...' : 'Enregistrer'}
+                    </Button>
+                  </div>
+                  {seatUpdateError && (
+                    <p className="text-sm text-destructive">{seatUpdateError}</p>
+                  )}
+                  {seatUpdateMessage && (
+                    <p className="text-sm text-emerald-600">{seatUpdateMessage}</p>
+                  )}
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
 
       <Dialog open={editDialogOpen} onOpenChange={handleEditDialogToggle}>

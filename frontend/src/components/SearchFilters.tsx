@@ -89,7 +89,12 @@ export function SearchFilters({
                     : 'bg-background hover:bg-muted'
                     }`}
                 >
-                  {category.name}
+                  <span className="flex items-center justify-center gap-2">
+                    {category.icon ? (
+                      <span aria-hidden>{category.icon}</span>
+                    ) : null}
+                    <span>{category.name}</span>
+                  </span>
                 </button>
               )
             })}
