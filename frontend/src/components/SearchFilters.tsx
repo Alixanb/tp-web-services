@@ -19,7 +19,6 @@ export function SearchFilters({
   onSearch,
 }: SearchFiltersProps) {
   const [categories, setCategories] = useState<Category[]>([])
-  const [showCategories, setShowCategories] = useState(false)
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -77,48 +76,33 @@ export function SearchFilters({
       </div>
 
       <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowCategories(!showCategories)}
-          >
-            Catégories {selectedCategoryIds.length > 0 && `(${selectedCategoryIds.length})`}
-          </Button>
+        <div className="flex justify-between">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2">
+            {categories.map((category) => {
+              const isSelected = selectedCategoryIds.includes(category.id)
+              return (
+                <button
+                  key={category.id}
+                  type="button"
+                  onClick={() => toggleCategory(category.id)}
+                  className={`px-5 py-4 rounded-md text-base transition-colors text-center border cursor-pointer ${
+                    isSelected
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-background hover:bg-muted'
+                  }`}
+                >
+                  {category.name}
+                </button>
+              )
+            })}
+          </div>
           {selectedCategoryIds.length > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={clearCategories}
-            >
+            <Button variant="ghost" size="lg" onClick={clearCategories}>
               <X className="h-4 w-4 mr-1" />
               Effacer
             </Button>
           )}
         </div>
-
-        {showCategories && (
-          <div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2">
-              {categories.map((category) => {
-                const isSelected = selectedCategoryIds.includes(category.id)
-                return (
-                  <button
-                    key={category.id}
-                    type="button"
-                    onClick={() => toggleCategory(category.id)}
-                    className={`px-3 py-2 rounded-md text-sm transition-colors text-center border cursor-pointer ${isSelected
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-background hover:bg-muted'
-                      }`}
-                  >
-                    {category.name}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        )}
 
         {selectedCategoryIds.length > 0 && (
           <div className="flex flex-wrap gap-2">

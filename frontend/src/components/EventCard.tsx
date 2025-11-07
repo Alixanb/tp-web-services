@@ -2,13 +2,13 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
   Card,
-  CardContent,
+  // CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
 import type { Event } from '@/types/Event'
-import { Calendar, MapPin, Users } from 'lucide-react'
+import { Calendar } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 interface EventCardProps {
@@ -26,10 +26,10 @@ export function EventCard({ event }: EventCardProps) {
   }
 
   const minPrice = Math.min(...event.ticketCategories.map((tc) => tc.price))
-  const availableTickets = event.ticketCategories.reduce(
-    (sum, tc) => sum + tc.availableStock,
-    0
-  )
+  // const availableTickets = event.ticketCategories.reduce(
+  //   (sum, tc) => sum + tc.availableStock,
+  //   0
+  // )
 
   return (
     <Card className="overflow-hidden hover:shadow-xl transition-all cursor-pointer group pb-6">
@@ -44,7 +44,7 @@ export function EventCard({ event }: EventCardProps) {
           <span className="text-6xl">🎟️</span>
         )}
       </div>
-      <CardHeader className="space-y-2 p-4 sm:p-6">
+      <CardHeader className="">
         <div className="flex items-center justify-between">
           <Badge variant="secondary" className="text-xs" asChild>
             <Link
@@ -58,12 +58,12 @@ export function EventCard({ event }: EventCardProps) {
         <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors text-base sm:text-lg">
           {event.title}
         </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-2 sm:space-y-3 p-4 sm:p-6 pt-0">
         <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
           <Calendar className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
           <span>{formatDate(event.startDate)}</span>
         </div>
+      </CardHeader>
+      {/* <CardContent className="space-y-2 sm:space-y-3 p-4 sm:p-6 pt-0">
         <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
           <MapPin className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
           <span className="truncate">
@@ -74,8 +74,8 @@ export function EventCard({ event }: EventCardProps) {
           <Users className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
           <span>{availableTickets} places disponibles</span>
         </div>
-      </CardContent>
-      <CardFooter className="flex items-center justify-between p-4 sm:p-6 pt-0">
+      </CardContent> */}
+      <CardFooter className="flex items-end justify-between p-4 sm:p-6 pt-0">
         <div>
           <div className="text-xs sm:text-sm text-muted-foreground">
             À partir de

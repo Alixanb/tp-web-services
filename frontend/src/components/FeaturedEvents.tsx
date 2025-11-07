@@ -138,7 +138,7 @@ export function FeaturedEvents() {
             </span>
           </div>
         </CardContent> */}
-        <CardFooter className="flex items-center justify-between p-4 pt-0 sm:p-6">
+        <CardFooter className="flex items-end justify-between p-4 pt-0 sm:p-6">
           <div>
             <div className="text-xs text-muted-foreground sm:text-sm">
               À partir de
