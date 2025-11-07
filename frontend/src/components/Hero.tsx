@@ -1,9 +1,23 @@
+import { useState, FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Search, Star } from 'lucide-react'
 
 export function Hero() {
+  const [searchQuery, setSearchQuery] = useState('')
+  const navigate = useNavigate()
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (searchQuery.trim()) {
+      navigate(`/events?search=${encodeURIComponent(searchQuery.trim())}`)
+    } else {
+      navigate('/events')
+    }
+  }
+
   return (
     <section className="container mx-auto px-4 py-12 sm:py-16 md:py-24">
       <div className="text-center space-y-4 sm:space-y-6 max-w-3xl mx-auto">
@@ -21,21 +35,27 @@ export function Hero() {
         </p>
 
         {/* Search Bar */}
-        <div className="flex flex-col sm:flex-row gap-3 max-w-2xl mx-auto mt-6 sm:mt-8">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col sm:flex-row gap-3 max-w-2xl mx-auto mt-6 sm:mt-8"
+        >
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
             <Input
               placeholder="Rechercher un événement, artiste, lieu..."
               className="pl-10 h-11 sm:h-12 text-sm"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
           <Button
+            type="submit"
             size="lg"
             className="h-11 sm:h-12 px-6 sm:px-8 text-sm sm:text-base"
           >
             Rechercher
           </Button>
-        </div>
+        </form>
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 sm:gap-6 md:gap-8 pt-8 sm:pt-10 md:pt-12">

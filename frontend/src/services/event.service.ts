@@ -23,7 +23,7 @@ export const eventService = {
   },
 
   // PUT /events/{id} - Modification (Organisateur)
-  async updateEvent(id: string, data: UpdateEventDto): Promise<Event> {
+  async updateEvent(id: string, data: Partial<UpdateEventDto>): Promise<Event> {
     return apiClient.put<Event>(`/events/${id}`, data)
   },
 

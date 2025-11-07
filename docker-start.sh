@@ -12,6 +12,7 @@ docker-compose exec -T postgres pg_isready -U postgres > /dev/null 2>&1
 
 
 
+echo ""
 echo "Frontend:  http://localhost:5173"
 echo "Backend:   http://localhost:3000/api"
 echo "Swagger:   http://localhost:3000/api/docs"

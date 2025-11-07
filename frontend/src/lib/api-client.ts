@@ -43,6 +43,8 @@ function buildHeaders(customHeaders?: HeadersInit): Headers {
   const token = getAuthToken()
   if (token) {
     headers.set('Authorization', `Bearer ${token}`)
+  } else {
+    console.warn('No auth token found in localStorage')
   }
   
   return headers
@@ -62,6 +64,15 @@ async function handleResponse<T>(response: Response): Promise<T> {
       errorType = errorData.error || errorType
     } catch {
       // Si la réponse n'est pas du JSON, utiliser le message par défaut
+    }
+    
+    // Si erreur 401, nettoyer le token et rediriger vers login
+    if (response.status === 401) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login'
+      }
     }
     
     throw new ApiError(errorMessage, response.status, errorType)

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import {
@@ -8,10 +9,20 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { Menu, Ticket } from 'lucide-react'
+import type { User } from '@/types/User'
 
-export function MobileMenu() {
+interface MobileMenuProps {
+  currentUser: User | null
+  accountLink: string
+  accountLabel: string
+  onLogout: () => void
+}
+
+export function MobileMenu({ currentUser, accountLink, accountLabel, onLogout }: MobileMenuProps) {
+  const [open, setOpen] = useState(false)
+
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="md:hidden">
           <Menu className="h-6 w-6" />
@@ -51,12 +62,37 @@ export function MobileMenu() {
             Espace organisateur
           </Link>
           <div className="border-t pt-4 mt-4 space-y-3">
-            <Button variant="outline" className="w-full" asChild>
-              <Link to="/login">Connexion</Link>
-            </Button>
-            <Button className="w-full" asChild>
-              <Link to="/admin/dashboard">Admin</Link>
-            </Button>
+            {currentUser ? (
+              <>
+                <Button variant="outline" className="w-full" asChild>
+                  <Link to={accountLink} onClick={() => setOpen(false)}>
+                    {accountLabel}
+                  </Link>
+                </Button>
+                <Button
+                  className="w-full"
+                  onClick={() => {
+                    onLogout()
+                    setOpen(false)
+                  }}
+                >
+                  Se déconnecter
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="outline" className="w-full" asChild>
+                  <Link to="/login" onClick={() => setOpen(false)}>
+                    Connexion
+                  </Link>
+                </Button>
+                <Button className="w-full" asChild>
+                  <Link to="/organizer/events" onClick={() => setOpen(false)}>
+                    Espace organisateur
+                  </Link>
+                </Button>
+              </>
+            )}
           </div>
         </nav>
       </SheetContent>

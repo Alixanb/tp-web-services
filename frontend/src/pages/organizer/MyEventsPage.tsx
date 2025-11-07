@@ -18,7 +18,7 @@ export function MyEventsPage() {
     try {
       // Pour le moment, on charge tous les événements
       // TODO: Filtrer par organizerId quand l'API sera prête
-      const data = await eventService.getEvents()
+      const data = await eventService.getEvents({ includeAllStatuses: true })
       setEvents(data)
     } catch (error) {
       console.error('Erreur lors du chargement des événements:', error)

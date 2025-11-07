@@ -12,7 +12,6 @@ import { LoginPage } from '@/pages/LoginPage'
 import { MyEventsPage } from '@/pages/organizer/MyEventsPage'
 import { EventSalesPage } from '@/pages/organizer/EventSalesPage'
 import { AdminDashboard } from '@/pages/admin/AdminDashboard'
-import { VenuesPage } from '@/pages/admin/VenuesPage'
 
 // Page d'accueil
 function HomePage() {
@@ -83,14 +82,6 @@ export function AppRoutes() {
               element={
                 <ProtectedRoute allowedRoles={['ADMIN']}>
                   <AdminDashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="venues"
-              element={
-                <ProtectedRoute allowedRoles={['ADMIN']}>
-                  <VenuesPage />
                 </ProtectedRoute>
               }
             />

@@ -18,23 +18,23 @@ export interface Event {
   id: string
   title: string
   description: string
-  startDate: Date
-  endDate: Date
+  startDate: string
+  endDate: string
   status: EventStatus
   imageUrl?: string
   venue: Venue
   category: Category
   organizer: User
   ticketCategories: TicketCategory[]
-  createdAt: Date
-  updatedAt: Date
+  createdAt: string
+  updatedAt: string
 }
 
 export interface CreateEventDto {
   title: string
   description: string
-  startDate: Date
-  endDate: Date
+  startDate: string
+  endDate: string
   imageUrl?: string
   venueId: string
   categoryId: string
@@ -49,8 +49,8 @@ export interface CreateEventDto {
 export interface UpdateEventDto {
   title?: string
   description?: string
-  startDate?: Date
-  endDate?: Date
+  startDate?: string
+  endDate?: string
   status?: EventStatus
   imageUrl?: string
   venueId?: string
@@ -62,9 +62,10 @@ export interface EventFilters {
   categoryId?: string
   venueId?: string
   city?: string
-  startDate?: Date
-  endDate?: Date
+  startDate?: string
+  endDate?: string
   minPrice?: number
   maxPrice?: number
   status?: EventStatus
+  includeAllStatuses?: boolean
 }

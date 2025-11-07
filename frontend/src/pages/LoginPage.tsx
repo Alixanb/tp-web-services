@@ -1,11 +1,11 @@
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { authService } from '@/services/auth.service'
+import type { LoginDto } from '@/types/User'
+import { Ticket } from 'lucide-react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { authService } from '@/services/auth.service'
-import { Ticket } from 'lucide-react'
-import type { LoginDto } from '@/types/User'
 
 export function LoginPage() {
   const navigate = useNavigate()
@@ -98,11 +98,15 @@ export function LoginPage() {
               {loading ? 'Connexion...' : 'Se connecter'}
             </Button>
 
-            <div className="text-center text-sm text-muted-foreground">
+            <div className="text-sm text-muted-foreground">
               <p className="mb-2">Comptes de test :</p>
               <p className="text-xs">CLIENT: client@eventpass.com</p>
               <p className="text-xs">ORGANIZER: organizer@eventpass.com</p>
-              <p className="text-xs">ADMIN: admin@eventpass.com</p>
+              <div className="text-xs">
+                <p className='font-bold'>ADMIN:</p>
+                <pre>admin@eventpass.com</pre>
+                <pre>password123</pre>
+              </div>
             </div>
           </form>
         </CardContent>

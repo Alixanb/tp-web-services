@@ -1,20 +1,33 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { EventCard } from '@/components/EventCard'
 import { SearchFilters } from '@/components/SearchFilters'
 import { eventService } from '@/services/event.service'
 import type { Event, EventFilters } from '@/types/Event'
 
 export function EventsPage() {
-  const [filters, setFilters] = useState<EventFilters>({})
+  const [searchParams] = useSearchParams()
+  const searchQuery = searchParams.get('search')
+  const [filters, setFilters] = useState<EventFilters>(
+    searchQuery ? { search: searchQuery } : {}
+  )
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(false)
 
-  // Charger les événements au montage
   useEffect(() => {
-    loadEvents()
-  }, [])
+    const urlSearchQuery = searchParams.get('search')
+    setFilters((prevFilters) => {
+      if (urlSearchQuery && urlSearchQuery !== prevFilters.search) {
+        return { search: urlSearchQuery }
+      }
+      if (!urlSearchQuery && prevFilters.search) {
+        return {}
+      }
+      return prevFilters
+    })
+  }, [searchParams])
 
-  const loadEvents = async () => {
+  const loadEvents = useCallback(async () => {
     setLoading(true)
     try {
       const data = await eventService.getEvents(filters)
@@ -24,7 +37,11 @@ export function EventsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [filters])
+
+  useEffect(() => {
+    loadEvents()
+  }, [loadEvents])
 
   const handleSearch = async () => {
     await loadEvents()

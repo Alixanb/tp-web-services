@@ -71,7 +71,11 @@ export class EventService {
       minPrice,
       maxPrice,
       status,
+      includeAllStatuses,
     } = query;
+
+    const includeAll =
+      includeAllStatuses === true || includeAllStatuses === 'true';
 
     const queryBuilder = this.eventRepository
       .createQueryBuilder('event')
@@ -123,7 +127,7 @@ export class EventService {
     // Filter by status (default to PUBLISHED for non-authenticated requests)
     if (status) {
       queryBuilder.andWhere('event.status = :status', { status });
-    } else {
+    } else if (!includeAll) {
       queryBuilder.andWhere('event.status = :status', {
         status: EventStatus.PUBLISHED,
       });
