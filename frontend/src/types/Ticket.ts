@@ -5,7 +5,7 @@ export type TicketStatus = 'ACTIVE' | 'USED' | 'TRANSFERRED' | 'CANCELLED'
 export interface Ticket {
   id: string
   orderId: string
-  event: Event
+  event?: Event
   ticketCategoryName: string
   seatNumber?: string
   qrCode: string

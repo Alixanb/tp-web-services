@@ -10,14 +10,6 @@ interface TicketCardProps {
 }
 
 export function TicketCard({ ticket, onViewQR }: TicketCardProps) {
-  const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString('fr-FR', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    })
-  }
-
   const statusColors = {
     ACTIVE: 'default',
     USED: 'secondary',
@@ -31,7 +23,7 @@ export function TicketCard({ ticket, onViewQR }: TicketCardProps) {
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <CardTitle className="text-lg mb-2 line-clamp-2">
-              {ticket.event.title}
+              {ticket.event?.title || 'Événement inconnu'}
             </CardTitle>
             <Badge variant={statusColors[ticket.status]}>{ticket.status}</Badge>
           </div>
@@ -54,15 +46,26 @@ export function TicketCard({ ticket, onViewQR }: TicketCardProps) {
 
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Calendar className="h-4 w-4 flex-shrink-0" />
-            <span>{ticket.event.startDate}</span>
-          </div>
-
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <MapPin className="h-4 w-4 flex-shrink-0" />
-            <span className="truncate">
-              {ticket.event.venue.name}, {ticket.event.venue.city}
+            <span>
+              {ticket.event?.startDate
+                ? new Date(ticket.event.startDate).toLocaleDateString('fr-FR')
+                : 'Date à confirmer'}
             </span>
           </div>
+
+          {ticket.event?.venue ? (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <MapPin className="h-4 w-4 flex-shrink-0" />
+              <span className="truncate">
+                {ticket.event.venue.name}
+                {ticket.event.venue.city ? `, ${ticket.event.venue.city}` : ''}
+              </span>
+            </div>
+          ) : (
+            <div className="text-sm text-muted-foreground italic">
+              Lieu non disponible
+            </div>
+          )}
         </div>
 
         <div className="space-y-3 mt-4">

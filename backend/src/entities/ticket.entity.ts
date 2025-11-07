@@ -31,6 +31,9 @@ export class Ticket {
   @Column()
   eventId: string;
 
+  @Column({ nullable: true })
+  venueId?: string;
+
   @ManyToOne(() => TicketCategory, (ticketCategory) => ticketCategory.tickets)
   @JoinColumn({ name: 'ticketCategoryId' })
   ticketCategory: TicketCategory;

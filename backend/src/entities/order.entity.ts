@@ -40,6 +40,18 @@ export class Order {
   @OneToMany(() => Ticket, (ticket) => ticket.order)
   tickets: Ticket[];
 
+  @BeforeInsert()
+  @BeforeUpdate()
+  mapTicketVenue() {
+    if (this.tickets) {
+      for (const ticket of this.tickets) {
+        if (!ticket.venueId && ticket.event?.venueId) {
+          ticket.venueId = ticket.event.venueId;
+        }
+      }
+    }
+  }
+
   @CreateDateColumn()
   createdAt: Date;
 

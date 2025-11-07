@@ -109,6 +109,7 @@ export class OrdersService {
           ticketsToCreate.push({
             ticketCategoryId: item.ticketCategoryId,
             eventId: ticketCategory.event.id,
+            venueId: ticketCategory.event.venueId,
             qrCode,
             price: categoryPrice,
             status: TicketStatus.ACTIVE,
