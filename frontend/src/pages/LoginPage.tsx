@@ -10,8 +10,8 @@ import { useNavigate } from 'react-router-dom'
 export function LoginPage() {
   const navigate = useNavigate()
   const [credentials, setCredentials] = useState<LoginDto>({
-    email: 'client@eventpass.com',
-    password: 'password',
+    email: 'client1@example.com',
+    password: 'password123',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -98,14 +98,27 @@ export function LoginPage() {
               {loading ? 'Connexion...' : 'Se connecter'}
             </Button>
 
-            <div className="text-sm text-muted-foreground">
-              <p className="mb-2">Comptes de test :</p>
-              <p className="text-xs">CLIENT: client@eventpass.com</p>
-              <p className="text-xs">ORGANIZER: organizer@eventpass.com</p>
-              <div className="text-xs">
-                <p className='font-bold'>ADMIN:</p>
-                <pre>admin@eventpass.com</pre>
-                <pre>password123</pre>
+            <div className="text-sm text-muted-foreground space-y-2 pt-4 border-t">
+              <p className="font-medium mb-3">Comptes de test :</p>
+              <div className="space-y-1.5 text-xs">
+                <div>
+                  <span className="font-semibold">CLIENT:</span>{' '}
+                  <span className="text-muted-foreground">
+                    client1@example.com / password123
+                  </span>
+                </div>
+                <div>
+                  <span className="font-semibold">ORGANIZER:</span>{' '}
+                  <span className="text-muted-foreground">
+                    organizer1@eventpass.com / password123
+                  </span>
+                </div>
+                <div>
+                  <span className="font-semibold">ADMIN:</span>{' '}
+                  <span className="text-muted-foreground">
+                    admin@eventpass.com / password123
+                  </span>
+                </div>
               </div>
             </div>
           </form>

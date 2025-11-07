@@ -6,6 +6,8 @@ import { FeaturedEvents } from '@/components/FeaturedEvents'
 import { CTA } from '@/components/CTA'
 import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { EventsPage } from '@/pages/EventsPage'
+import { EventDetailPage } from '@/pages/EventDetailPage'
+import { TicketReservationPage } from '@/pages/TicketReservationPage'
 import { MyOrdersPage } from '@/pages/MyOrdersPage'
 import { MyTicketsPage } from '@/pages/MyTicketsPage'
 import { LoginPage } from '@/pages/LoginPage'
@@ -36,6 +38,15 @@ export function AppRoutes() {
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
           <Route path="events" element={<EventsPage />} />
+          <Route path="events/:id" element={<EventDetailPage />} />
+          <Route
+            path="reserve/:ticketCategoryId"
+            element={
+              <ProtectedRoute allowedRoles={['CLIENT', 'ORGANIZER', 'ADMIN']}>
+                <TicketReservationPage />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Client routes */}
           <Route

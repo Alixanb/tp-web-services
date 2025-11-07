@@ -1,3 +1,5 @@
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -5,10 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Calendar, MapPin, Users, Star } from 'lucide-react'
 import type { Event } from '@/types/Event'
+import { Calendar, MapPin, Users } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 interface EventCardProps {
   event: Event
@@ -48,12 +49,6 @@ export function EventCard({ event, onSelect }: EventCardProps) {
           <Badge variant="secondary" className="text-xs">
             {event.category.name}
           </Badge>
-          <Badge
-            variant={event.status === 'PUBLISHED' ? 'default' : 'outline'}
-            className="text-xs"
-          >
-            {event.status}
-          </Badge>
         </div>
         <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors text-base sm:text-lg">
           {event.title}
@@ -84,8 +79,8 @@ export function EventCard({ event, onSelect }: EventCardProps) {
             {minPrice}€
           </div>
         </div>
-        <Button size="sm" onClick={() => onSelect?.(event)}>
-          Voir détails
+        <Button size="sm" asChild>
+          <Link to={`/events/${event.id}`}>Voir détails</Link>
         </Button>
       </CardFooter>
     </Card>
