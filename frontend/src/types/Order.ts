@@ -40,3 +40,7 @@ export interface OrderSummary {
   ticketCount: number
   status: OrderStatus
 }
+
+export interface UpdateOrderDto {
+  status?: OrderStatus
+}

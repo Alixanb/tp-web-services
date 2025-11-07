@@ -26,4 +26,9 @@ export const orderService = {
   async getAllOrders(): Promise<Order[]> {
     return apiClient.get<Order[]>('/orders')
   },
+
+  // PUT /orders/{id} - Mise à jour (Admin)
+  async updateOrder(id: string, data: { status?: OrderStatus }): Promise<Order> {
+    return apiClient.put<Order>(`/orders/${id}`, data)
+  },
 }

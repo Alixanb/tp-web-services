@@ -1,24 +1,25 @@
 import {
-  Injectable,
-  NotFoundException,
   BadRequestException,
   ForbiddenException,
+  Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
-import { Order } from 'src/entities/order.entity';
-import { Ticket } from 'src/entities/ticket.entity';
-import { TicketCategory } from 'src/entities/ticket-category.entity';
-import { Event } from 'src/entities/event.entity';
-import { CreateOrderDto } from './dto/create-order.dto';
+import * as crypto from 'crypto';
 import {
+  EventStatus,
   OrderStatus,
   TicketStatus,
-  EventStatus,
   UserRole,
 } from 'src/common/enum/role.enum';
+import { Event } from 'src/entities/event.entity';
+import { Order } from 'src/entities/order.entity';
+import { TicketCategory } from 'src/entities/ticket-category.entity';
+import { Ticket } from 'src/entities/ticket.entity';
 import { User } from 'src/entities/user.entity';
-import * as crypto from 'crypto';
+import { DataSource, Repository } from 'typeorm';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { UpdateOrderDto } from './dto/update-order.dto';
 
 @Injectable()
 export class OrdersService {
@@ -222,6 +223,30 @@ export class OrdersService {
     }
 
     return order;
+  }
+
+  async update(
+    id: string,
+    updateOrderDto: UpdateOrderDto,
+    user: User,
+  ): Promise<Order> {
+    if (user.role !== UserRole.ADMIN) {
+      throw new ForbiddenException('Only administrators can update orders');
+    }
+
+    const order = await this.orderRepository.findOne({ where: { id } });
+
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
+
+    if (updateOrderDto.status) {
+      order.status = updateOrderDto.status;
+    }
+
+    await this.orderRepository.save(order);
+
+    return this.findOne(order.id, user);
   }
 
   private generateQRCode(): string {

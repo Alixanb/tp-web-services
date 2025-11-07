@@ -1,14 +1,14 @@
 import {
+  ForbiddenException,
   Injectable,
   NotFoundException,
-  ForbiddenException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Ticket } from 'src/entities/ticket.entity';
-import { UpdateTicketDto } from './dto/update-ticket.dto';
-import { User } from 'src/entities/user.entity';
 import { UserRole } from 'src/common/enum/role.enum';
+import { Ticket } from 'src/entities/ticket.entity';
+import { User } from 'src/entities/user.entity';
+import { Repository } from 'typeorm';
+import { UpdateTicketDto } from './dto/update-ticket.dto';
 
 @Injectable()
 export class TicketsService {
@@ -33,10 +33,21 @@ export class TicketsService {
       throw new NotFoundException('Ticket not found');
     }
 
+    if (!ticket.order) {
+      throw new NotFoundException('Ticket order not found');
+    }
+
+    if (!ticket.event) {
+      throw new NotFoundException('Ticket event not found');
+    }
+
     // Check access permissions
+    const orderOwnerId = ticket.order?.userId;
+    const eventOrganizerId = ticket.event?.organizerId;
+
     if (user.role !== UserRole.ADMIN) {
-      const isOwner = ticket.order.userId === user.id;
-      const isOrganizer = ticket.event.organizerId === user.id;
+      const isOwner = orderOwnerId === user.id;
+      const isOrganizer = eventOrganizerId === user.id;
 
       if (!isOwner && !isOrganizer) {
         throw new ForbiddenException('You do not have access to this ticket');
@@ -44,7 +55,7 @@ export class TicketsService {
     }
 
     // Remove sensitive data
-    if (ticket.order?.user) {
+    if (ticket.order.user && 'password' in ticket.order.user) {
       delete ticket.order.user.password;
     }
 
@@ -86,8 +97,8 @@ export class TicketsService {
     // Only owner, organizer, or admin can update ticket
     const canUpdate =
       user.role === UserRole.ADMIN ||
-      ticket.order.userId === user.id ||
-      ticket.event.organizerId === user.id;
+      ticket.order?.userId === user.id ||
+      ticket.event?.organizerId === user.id;
 
     if (!canUpdate) {
       throw new ForbiddenException('You cannot update this ticket');

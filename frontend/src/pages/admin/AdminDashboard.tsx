@@ -19,7 +19,7 @@ import { userService } from '@/services/user.service'
 import { venueService } from '@/services/venue.service'
 import type { Category } from '@/types/Category'
 import type { Event, EventStatus, UpdateEventDto } from '@/types/Event'
-import type { Order } from '@/types/Order'
+import type { Order, OrderStatus } from '@/types/Order'
 import type { Ticket } from '@/types/Ticket'
 import type { User } from '@/types/User'
 import type { Venue } from '@/types/Venue'
@@ -31,7 +31,6 @@ import {
   Plus,
   RefreshCw,
   Tag,
-  Ticket as TicketIcon,
   Trash2,
   TrendingUp,
   Users
@@ -111,6 +110,11 @@ export function AdminDashboard() {
   const [seatUpdateError, setSeatUpdateError] = useState<string | null>(null)
   const [updatingSeat, setUpdatingSeat] = useState(false)
   const [seatUpdateMessage, setSeatUpdateMessage] = useState<string | null>(null)
+  const [orderDialogOpen, setOrderDialogOpen] = useState(false)
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
+  const [orderStatus, setOrderStatus] = useState<OrderStatus>('PENDING')
+  const [orderError, setOrderError] = useState<string | null>(null)
+  const [savingOrder, setSavingOrder] = useState(false)
   const navigate = useNavigate()
 
   const loadDashboardData = useCallback(async () => {
@@ -218,6 +222,14 @@ export function AdminDashboard() {
     'PUBLISHED',
     'CANCELLED',
     'COMPLETED',
+  ]
+
+  const orderStatusOptions: OrderStatus[] = [
+    'PENDING',
+    'RESERVED',
+    'PAID',
+    'CANCELLED',
+    'REFUNDED',
   ]
 
   const handleEventStatusChange = async (
@@ -364,7 +376,7 @@ export function AdminDashboard() {
       setEvents((current) => current.filter((eventItem) => eventItem.id !== eventId))
       setError(null)
       try {
-        await retrieveDashboard()
+        await loadDashboardData()
       } catch (refreshErr) {
         console.error('Impossible de rafraîchir les données après suppression:', refreshErr)
       }
@@ -669,6 +681,55 @@ export function AdminDashboard() {
     }
   }
 
+  const openOrderDialog = (order: Order) => {
+    setSelectedOrder(order)
+    setOrderStatus(order.status)
+    setOrderError(null)
+    setOrderDialogOpen(true)
+  }
+
+  const closeOrderDialog = () => {
+    setOrderDialogOpen(false)
+    setSelectedOrder(null)
+    setOrderError(null)
+    setOrderStatus('PENDING')
+  }
+
+  const handleOrderDialogToggle = (open: boolean) => {
+    if (!open) {
+      closeOrderDialog()
+    } else {
+      setOrderDialogOpen(true)
+    }
+  }
+
+  const submitOrderUpdate = async () => {
+    if (!selectedOrder) {
+      return
+    }
+    setSavingOrder(true)
+    setOrderError(null)
+    try {
+      const updated = await orderService.updateOrder(selectedOrder.id, {
+        status: orderStatus,
+      })
+      setOrders((current) =>
+        current.map((orderItem) =>
+          orderItem.id === selectedOrder.id ? { ...orderItem, ...updated } : orderItem
+        )
+      )
+      closeOrderDialog()
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setOrderError(err.message)
+      } else {
+        setOrderError('Mise à jour impossible.')
+      }
+    } finally {
+      setSavingOrder(false)
+    }
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="space-y-8">
@@ -868,8 +929,10 @@ export function AdminDashboard() {
                         <span className="font-medium">{order.user?.email}</span>
                         <span className="text-xs text-muted-foreground">
                           {formatDateTime(order.orderDate)}
-                          {order.id}
                         </span>
+                      </div>
+                      <div className="mt-1 text-xs text-muted-foreground break-all">
+                        {order.id}
                       </div>
                       <div className="mt-2 flex items-center justify-between text-sm">
                         <span className="text-muted-foreground">
@@ -878,6 +941,12 @@ export function AdminDashboard() {
                         <span className="font-semibold">
                           {formatCurrency(order.totalAmount || 0)}
                         </span>
+                      </div>
+                      <div className="mt-3 flex items-center justify-between">
+                        <Badge variant="outline">{order.status}</Badge>
+                        <Button size="sm" variant="outline" onClick={() => openOrderDialog(order)}>
+                          Modifier
+                        </Button>
                       </div>
                     </div>
                   ))
@@ -1103,106 +1172,6 @@ export function AdminDashboard() {
             </CardContent>
           </Card>
         </div>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <div>
-              <CardTitle>Gestion des billets</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                Recherche et mise à jour du numéro de place
-              </p>
-            </div>
-            <TicketIcon className="h-5 w-5 text-muted-foreground" />
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <Input
-                placeholder="ID du billet"
-                value={ticketLookupId}
-                onChange={(evt) => setTicketLookupId(evt.target.value)}
-                className="sm:max-w-sm"
-              />
-              <div className="flex gap-2">
-                <Button
-                  onClick={handleTicketLookup}
-                  disabled={ticketLookupLoading}
-                >
-                  {ticketLookupLoading ? 'Recherche...' : 'Rechercher'}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={resetTicketLookup}
-                  disabled={
-                    ticketLookupLoading ||
-                    (!ticketResult && !ticketLookupId && !ticketLookupError && !seatInput)
-                  }
-                >
-                  Réinitialiser
-                </Button>
-              </div>
-            </div>
-            {ticketLookupError && (
-              <p className="text-sm text-destructive">{ticketLookupError}</p>
-            )}
-            {ticketResult && (
-              <div className="space-y-4 rounded-lg border border-border/70 p-4">
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <div className="space-y-1 text-sm">
-                    <div className="font-semibold">Événement</div>
-                    <div className="text-muted-foreground">
-                      {ticketResult.event?.title || 'Non défini'}
-                    </div>
-                  </div>
-                  <div className="space-y-1 text-sm">
-                    <div className="font-semibold">Catégorie</div>
-                    <div className="text-muted-foreground">
-                      {ticketResult.ticketCategoryName}
-                    </div>
-                  </div>
-                  <div className="space-y-1 text-sm">
-                    <div className="font-semibold">Statut</div>
-                    <Badge variant="outline">{ticketResult.status}</Badge>
-                  </div>
-                  <div className="space-y-1 text-sm">
-                    <div className="font-semibold">Tarif</div>
-                    <div className="text-muted-foreground">
-                      {formatCurrency(ticketResult.price)}
-                    </div>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium" htmlFor="ticket-seat">
-                    Numéro de place
-                  </label>
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-                    <Input
-                      id="ticket-seat"
-                      value={seatInput}
-                      onChange={(evt) => {
-                        setSeatInput(evt.target.value)
-                        setSeatUpdateMessage(null)
-                      }}
-                      placeholder="Ex: A12"
-                      className="sm:max-w-xs"
-                    />
-                    <Button
-                      onClick={submitSeatUpdate}
-                      disabled={updatingSeat}
-                    >
-                      {updatingSeat ? 'Enregistrement...' : 'Enregistrer'}
-                    </Button>
-                  </div>
-                  {seatUpdateError && (
-                    <p className="text-sm text-destructive">{seatUpdateError}</p>
-                  )}
-                  {seatUpdateMessage && (
-                    <p className="text-sm text-emerald-600">{seatUpdateMessage}</p>
-                  )}
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
       </div>
 
       <Dialog open={editDialogOpen} onOpenChange={handleEditDialogToggle}>
@@ -1290,6 +1259,62 @@ export function AdminDashboard() {
               disabled={savingEdit || editForm.title.trim().length === 0}
             >
               {savingEdit ? 'Enregistrement...' : 'Enregistrer'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={orderDialogOpen} onOpenChange={handleOrderDialogToggle}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Modifier la commande</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {orderError && <p className="text-sm text-destructive">{orderError}</p>}
+            {selectedOrder && (
+              <div className="space-y-2 text-sm">
+                <div>
+                  <span className="font-medium">Commande:</span>{' '}
+                  <span className="break-all text-muted-foreground">{selectedOrder.id}</span>
+                </div>
+                <div>
+                  <span className="font-medium">Client:</span>{' '}
+                  <span className="text-muted-foreground">{selectedOrder.user?.email}</span>
+                </div>
+                <div>
+                  <span className="font-medium">Montant:</span>{' '}
+                  <span className="text-muted-foreground">{formatCurrency(selectedOrder.totalAmount || 0)}</span>
+                </div>
+                <div>
+                  <span className="font-medium">Créée le:</span>{' '}
+                  <span className="text-muted-foreground">{formatDateTime(selectedOrder.orderDate)}</span>
+                </div>
+              </div>
+            )}
+            <div className="space-y-2">
+              <label className="text-sm font-medium" htmlFor="order-status">
+                Statut
+              </label>
+              <select
+                id="order-status"
+                value={orderStatus}
+                onChange={(evt) => setOrderStatus(evt.target.value as OrderStatus)}
+                className="rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
+              >
+                {orderStatusOptions.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={closeOrderDialog} disabled={savingOrder}>
+              Annuler
+            </Button>
+            <Button onClick={submitOrderUpdate} disabled={savingOrder}>
+              {savingOrder ? 'Enregistrement...' : 'Enregistrer'}
             </Button>
           </DialogFooter>
         </DialogContent>
