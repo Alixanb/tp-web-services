@@ -9,6 +9,7 @@ import { Loader } from '@/components/ui/loader'
 import { eventService } from '@/services/event.service'
 import { categoryService } from '@/services/category.service'
 import { venueService } from '@/services/venue.service'
+import { ApiError } from '@/lib/api-client'
 import type { CreateEventDto } from '@/types/Event'
 import type { Category } from '@/types/Category'
 import type { Venue } from '@/types/Venue'
@@ -20,6 +21,22 @@ interface TicketCategoryForm {
   description: string
 }
 
+interface FormErrors {
+  title?: string
+  description?: string
+  startDate?: string
+  endDate?: string
+  venueId?: string
+  categoryId?: string
+  imageUrl?: string
+}
+
+interface TicketCategoryErrors {
+  name?: string
+  price?: string
+  totalStock?: string
+}
+
 export function CreateEventPage() {
   const navigate = useNavigate()
   const [categories, setCategories] = useState<Category[]>([])
@@ -29,6 +46,10 @@ export function CreateEventPage() {
   const [error, setError] = useState('')
   const [ticketCategories, setTicketCategories] = useState<TicketCategoryForm[]>([
     { name: '', price: '', totalStock: '', description: '' },
+  ])
+  const [formErrors, setFormErrors] = useState<FormErrors>({})
+  const [ticketCategoryErrors, setTicketCategoryErrors] = useState<TicketCategoryErrors[]>([
+    {},
   ])
   const [form, setForm] = useState({
     title: '',
@@ -74,14 +95,29 @@ export function CreateEventPage() {
     setTicketCategories((current) =>
       current.map((item, i) => (i === index ? { ...item, [field]: value } : item))
     )
+
+    if (field === 'name' || field === 'price' || field === 'totalStock') {
+      setTicketCategoryErrors((current) => {
+        const next = [...current]
+        const currentErrors = next[index] || {}
+        if (!currentErrors[field]) {
+          return next
+        }
+        const { [field]: _removed, ...rest } = currentErrors
+        next[index] = rest
+        return next
+      })
+    }
   }
 
   const addTicketCategory = () => {
     setTicketCategories((current) => [...current, { name: '', price: '', totalStock: '', description: '' }])
+    setTicketCategoryErrors((current) => [...current, {}])
   }
 
   const removeTicketCategory = (index: number) => {
     setTicketCategories((current) => current.filter((_, i) => i !== index))
+    setTicketCategoryErrors((current) => current.filter((_, i) => i !== index))
   }
 
   const resetForm = () => {
@@ -95,37 +131,156 @@ export function CreateEventPage() {
       imageUrl: '',
     })
     setTicketCategories([{ name: '', price: '', totalStock: '', description: '' }])
+    setTicketCategoryErrors([{}])
+    setFormErrors({})
+    setError('')
+  }
+
+  const clearFormError = (field: keyof FormErrors) => {
+    setFormErrors((current) => {
+      if (!current[field]) {
+        return current
+      }
+      const { [field]: _removed, ...rest } = current
+      return rest
+    })
+  }
+
+  const isValidUrl = (value: string) => {
+    try {
+      const url = new URL(value)
+      return url.protocol === 'http:' || url.protocol === 'https:'
+    } catch {
+      return false
+    }
+  }
+
+  const validateForm = (): CreateEventDto['ticketCategories'] | null => {
+    const newFormErrors: FormErrors = {}
+    const newTicketCategoryErrors: TicketCategoryErrors[] = ticketCategories.map(() => ({}))
+
+    const trimmedTitle = form.title.trim()
+    if (!trimmedTitle) {
+      newFormErrors.title = 'Le titre est obligatoire.'
+    }
+
+    const trimmedDescription = form.description.trim()
+    if (!trimmedDescription) {
+      newFormErrors.description = 'La description est obligatoire.'
+    }
+
+    if (!form.startDate) {
+      newFormErrors.startDate = 'La date de début est obligatoire.'
+    }
+
+    if (!form.endDate) {
+      newFormErrors.endDate = 'La date de fin est obligatoire.'
+    }
+
+    const start = form.startDate ? new Date(form.startDate) : null
+    const end = form.endDate ? new Date(form.endDate) : null
+
+    if (start && Number.isNaN(start.getTime())) {
+      newFormErrors.startDate = 'Format de date de début invalide.'
+    }
+
+    if (end && Number.isNaN(end.getTime())) {
+      newFormErrors.endDate = 'Format de date de fin invalide.'
+    }
+
+    if (start && end && !Number.isNaN(start.getTime()) && !Number.isNaN(end.getTime())) {
+      if (end <= start) {
+        newFormErrors.endDate = 'La date de fin doit être postérieure à la date de début.'
+      }
+    }
+
+    if (!form.categoryId) {
+      newFormErrors.categoryId = 'Sélectionnez une catégorie.'
+    }
+
+    if (!form.venueId) {
+      newFormErrors.venueId = 'Sélectionnez un lieu.'
+    }
+
+    if (form.imageUrl && !isValidUrl(form.imageUrl)) {
+      newFormErrors.imageUrl = "L'URL de l’image est invalide."
+    }
+
+    ticketCategories.forEach((ticketCategory, index) => {
+      const errors: TicketCategoryErrors = {}
+      const trimmedName = ticketCategory.name.trim()
+      if (!trimmedName) {
+        errors.name = 'Le nom de la catégorie est obligatoire.'
+      }
+
+      const price = Number(ticketCategory.price)
+      if (ticketCategory.price === '') {
+        errors.price = 'Le prix est obligatoire.'
+      } else if (Number.isNaN(price)) {
+        errors.price = 'Le prix doit être un nombre.'
+      } else if (price <= 0) {
+        errors.price = 'Le prix doit être supérieur à 0.'
+      }
+
+      const stock = Number(ticketCategory.totalStock)
+      if (ticketCategory.totalStock === '') {
+        errors.totalStock = 'Le stock est obligatoire.'
+      } else if (!Number.isInteger(stock)) {
+        errors.totalStock = 'Le stock doit être un entier.'
+      } else if (stock <= 0) {
+        errors.totalStock = 'Le stock doit être supérieur à 0.'
+      }
+
+      newTicketCategoryErrors[index] = errors
+    })
+
+    const hasFormErrors = Object.values(newFormErrors).some(Boolean)
+    const hasTicketErrors = newTicketCategoryErrors.some((ticketError) =>
+      Object.values(ticketError).some(Boolean)
+    )
+
+    if (hasFormErrors || hasTicketErrors) {
+      setFormErrors(newFormErrors)
+      setTicketCategoryErrors(newTicketCategoryErrors)
+      setError('Veuillez corriger les erreurs indiquées.')
+      return null
+    }
+
+    const preparedTicketCategories = ticketCategories.map((ticketCategory) => ({
+      name: ticketCategory.name.trim(),
+      price: Number(ticketCategory.price),
+      totalStock: Number(ticketCategory.totalStock),
+      description: ticketCategory.description.trim() || undefined,
+    }))
+
+    if (preparedTicketCategories.length === 0) {
+      setError('Ajoutez au moins une catégorie de billet.')
+      return null
+    }
+
+    setFormErrors({})
+    setTicketCategoryErrors(newTicketCategoryErrors)
+    setError('')
+
+    return preparedTicketCategories
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
 
-    if (!form.title || !form.description || !form.startDate || !form.endDate || !form.venueId || !form.categoryId) {
-      setError('Veuillez renseigner tous les champs obligatoires.')
-      return
-    }
+    const preparedTicketCategories = validateForm()
 
-    const preparedTicketCategories = ticketCategories
-      .filter((tc) => tc.name && tc.price && tc.totalStock)
-      .map((tc) => ({
-        name: tc.name,
-        price: Number(tc.price),
-        totalStock: Number(tc.totalStock),
-        description: tc.description || undefined,
-      }))
-
-    if (preparedTicketCategories.length === 0) {
-      setError('Ajoutez au moins une catégorie de billet complète.')
+    if (!preparedTicketCategories) {
       return
     }
 
     const payload: CreateEventDto = {
-      title: form.title,
-      description: form.description,
+      title: form.title.trim(),
+      description: form.description.trim(),
       startDate: new Date(form.startDate).toISOString(),
       endDate: new Date(form.endDate).toISOString(),
-      imageUrl: form.imageUrl || undefined,
+      imageUrl: form.imageUrl ? form.imageUrl.trim() : undefined,
       venueId: form.venueId,
       categoryId: form.categoryId,
       ticketCategories: preparedTicketCategories,
@@ -139,7 +294,13 @@ export function CreateEventPage() {
       navigate('/organizer/events')
     } catch (err) {
       console.error('Erreur lors de la création de l’événement:', err)
-      setError("Impossible de créer l'événement. Veuillez réessayer.")
+      if (err instanceof ApiError) {
+        setError(err.message || "Impossible de créer l'événement. Veuillez réessayer.")
+      } else if (err instanceof Error) {
+        setError(err.message || "Impossible de créer l'événement. Veuillez réessayer.")
+      } else {
+        setError("Impossible de créer l'événement. Veuillez réessayer.")
+      }
     } finally {
       setLoading(false)
     }
@@ -178,18 +339,25 @@ export function CreateEventPage() {
                 <label className="text-sm font-medium">Titre*</label>
                 <Input
                   value={form.title}
-                  onChange={(e) => setForm((current) => ({ ...current, title: e.target.value }))}
+                  onChange={(e) => {
+                    setForm((current) => ({ ...current, title: e.target.value }))
+                    clearFormError('title')
+                  }}
                   placeholder="Nom de l'événement"
-                  required
                 />
+                {formErrors.title && <p className="text-xs text-destructive">{formErrors.title}</p>}
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Image (URL)</label>
                 <Input
                   value={form.imageUrl}
-                  onChange={(e) => setForm((current) => ({ ...current, imageUrl: e.target.value }))}
+                  onChange={(e) => {
+                    setForm((current) => ({ ...current, imageUrl: e.target.value }))
+                    clearFormError('imageUrl')
+                  }}
                   placeholder="https://..."
                 />
+                {formErrors.imageUrl && <p className="text-xs text-destructive">{formErrors.imageUrl}</p>}
               </div>
             </div>
 
@@ -197,11 +365,16 @@ export function CreateEventPage() {
               <label className="text-sm font-medium">Description*</label>
               <Textarea
                 value={form.description}
-                onChange={(e) => setForm((current) => ({ ...current, description: e.target.value }))}
+                onChange={(e) => {
+                  setForm((current) => ({ ...current, description: e.target.value }))
+                  clearFormError('description')
+                }}
                 rows={4}
                 placeholder="Décrivez votre événement..."
-                required
               />
+              {formErrors.description && (
+                <p className="text-xs text-destructive">{formErrors.description}</p>
+              )}
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
@@ -210,18 +383,24 @@ export function CreateEventPage() {
                 <Input
                   type="datetime-local"
                   value={form.startDate}
-                  onChange={(e) => setForm((current) => ({ ...current, startDate: e.target.value }))}
-                  required
+                  onChange={(e) => {
+                    setForm((current) => ({ ...current, startDate: e.target.value }))
+                    clearFormError('startDate')
+                  }}
                 />
+                {formErrors.startDate && <p className="text-xs text-destructive">{formErrors.startDate}</p>}
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Date de fin*</label>
                 <Input
                   type="datetime-local"
                   value={form.endDate}
-                  onChange={(e) => setForm((current) => ({ ...current, endDate: e.target.value }))}
-                  required
+                  onChange={(e) => {
+                    setForm((current) => ({ ...current, endDate: e.target.value }))
+                    clearFormError('endDate')
+                  }}
                 />
+                {formErrors.endDate && <p className="text-xs text-destructive">{formErrors.endDate}</p>}
               </div>
             </div>
 
@@ -231,8 +410,10 @@ export function CreateEventPage() {
                 <select
                   className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
                   value={form.categoryId}
-                  onChange={(e) => setForm((current) => ({ ...current, categoryId: e.target.value }))}
-                  required
+                  onChange={(e) => {
+                    setForm((current) => ({ ...current, categoryId: e.target.value }))
+                    clearFormError('categoryId')
+                  }}
                 >
                   {categories.map((category) => (
                     <option key={category.id} value={category.id}>
@@ -240,14 +421,17 @@ export function CreateEventPage() {
                     </option>
                   ))}
                 </select>
+                {formErrors.categoryId && <p className="text-xs text-destructive">{formErrors.categoryId}</p>}
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Lieu*</label>
                 <select
                   className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
                   value={form.venueId}
-                  onChange={(e) => setForm((current) => ({ ...current, venueId: e.target.value }))}
-                  required
+                  onChange={(e) => {
+                    setForm((current) => ({ ...current, venueId: e.target.value }))
+                    clearFormError('venueId')
+                  }}
                 >
                   {venues.map((venue) => (
                     <option key={venue.id} value={venue.id}>
@@ -255,6 +439,7 @@ export function CreateEventPage() {
                     </option>
                   ))}
                 </select>
+                {formErrors.venueId && <p className="text-xs text-destructive">{formErrors.venueId}</p>}
               </div>
             </div>
 
@@ -279,8 +464,10 @@ export function CreateEventPage() {
                             value={ticketCategory.name}
                             onChange={(e) => handleTicketCategoryChange(index, 'name', e.target.value)}
                             placeholder="Ex: Billet standard"
-                            required
                           />
+                          {ticketCategoryErrors[index]?.name && (
+                            <p className="text-xs text-destructive">{ticketCategoryErrors[index]?.name}</p>
+                          )}
                         </div>
                         <div className="space-y-2">
                           <label className="text-sm font-medium">Prix*</label>
@@ -291,8 +478,10 @@ export function CreateEventPage() {
                             value={ticketCategory.price}
                             onChange={(e) => handleTicketCategoryChange(index, 'price', e.target.value)}
                             placeholder="Prix en euros"
-                            required
                           />
+                          {ticketCategoryErrors[index]?.price && (
+                            <p className="text-xs text-destructive">{ticketCategoryErrors[index]?.price}</p>
+                          )}
                         </div>
                       </div>
                       <div className="grid gap-4 md:grid-cols-2">
@@ -305,8 +494,10 @@ export function CreateEventPage() {
                             value={ticketCategory.totalStock}
                             onChange={(e) => handleTicketCategoryChange(index, 'totalStock', e.target.value)}
                             placeholder="Nombre de billets disponibles"
-                            required
                           />
+                          {ticketCategoryErrors[index]?.totalStock && (
+                            <p className="text-xs text-destructive">{ticketCategoryErrors[index]?.totalStock}</p>
+                          )}
                         </div>
                         <div className="space-y-2">
                           <label className="text-sm font-medium">Description</label>

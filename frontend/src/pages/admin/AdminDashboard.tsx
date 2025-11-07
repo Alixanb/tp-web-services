@@ -311,8 +311,19 @@ export function AdminDashboard() {
     try {
       await eventService.deleteEvent(eventId)
       setEvents((current) => current.filter((eventItem) => eventItem.id !== eventId))
+      setError(null)
+      try {
+        await retrieveDashboard()
+      } catch (refreshErr) {
+        console.error('Impossible de rafraîchir les données après suppression:', refreshErr)
+      }
     } catch (err) {
       console.error('Erreur lors de la suppression de l\'événement:', err)
+      if (err instanceof ApiError) {
+        setError(err.message || "Suppression impossible.")
+      } else {
+        setError('Suppression impossible.')
+      }
     } finally {
       setDeletingEventId(null)
     }
