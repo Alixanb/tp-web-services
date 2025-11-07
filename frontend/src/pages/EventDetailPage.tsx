@@ -5,7 +5,7 @@ import { eventService } from '@/services/event.service'
 import type { Event } from '@/types/Event'
 import { ArrowLeft, Calendar, MapPin, Ticket } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 export function EventDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -84,7 +84,11 @@ export function EventDetailPage() {
 
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <Badge variant="secondary">{event.category.name}</Badge>
+            <Badge variant="secondary" asChild>
+              <Link to={`/events?categoryIds=${event.category.id}`}>
+                {event.category.name}
+              </Link>
+            </Badge>
           </div>
 
           <h1 className="text-3xl md:text-4xl font-bold">{event.title}</h1>

@@ -60,6 +60,7 @@ export interface UpdateEventDto {
 export interface EventFilters {
   search?: string
   categoryId?: string
+  categoryIds?: string[]
   venueId?: string
   city?: string
   startDate?: string

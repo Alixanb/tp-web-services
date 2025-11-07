@@ -95,9 +95,20 @@ export function FeaturedEvents() {
         </div>
         <CardHeader className="space-y-2 p-4 sm:p-6">
           <div className="flex items-center justify-between">
-            <Badge variant="secondary" className="text-xs">
-              {event.category?.name || 'Sans catégorie'}
-            </Badge>
+            {event.category ? (
+              <Badge variant="secondary" className="text-xs" asChild>
+                <Link
+                  to={`/events?categoryIds=${event.category.id}`}
+                  onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                >
+                  {event.category.name}
+                </Link>
+              </Badge>
+            ) : (
+              <Badge variant="secondary" className="text-xs">
+                Sans catégorie
+              </Badge>
+            )}
             <Badge variant="outline" className="text-xs">
               {event.venue?.city || 'Lieu à définir'}
             </Badge>

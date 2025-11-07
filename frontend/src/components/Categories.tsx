@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
 import {
   Music,
@@ -118,20 +119,22 @@ export function Categories() {
           {highlightedCategories.map((category) => {
             const Icon = resolveIcon(category.name)
             return (
-              <Card
+              <Link
                 key={category.id}
-                className="cursor-pointer border-2 transition-all hover:scale-105 hover:border-primary hover:shadow-lg"
+                to={`/events?categoryIds=${category.id}`}
               >
-                <CardContent className="space-y-2 p-4 text-center sm:space-y-3 sm:p-6">
-                  <Icon className="mx-auto h-8 w-8 text-primary sm:h-10 sm:w-10" />
-                  <div className="text-sm font-semibold sm:text-base">
-                    {category.name}
-                  </div>
-                  <div className="text-xs text-muted-foreground sm:text-sm">
-                    {category.eventCount.toLocaleString('fr-FR')} événements
-                  </div>
-                </CardContent>
-              </Card>
+                <Card className="cursor-pointer border-2 transition-all hover:scale-105 hover:border-primary hover:shadow-lg">
+                  <CardContent className="space-y-2 p-4 text-center sm:space-y-3 sm:p-6">
+                    <Icon className="mx-auto h-8 w-8 text-primary sm:h-10 sm:w-10" />
+                    <div className="text-sm font-semibold sm:text-base">
+                      {category.name}
+                    </div>
+                    <div className="text-xs text-muted-foreground sm:text-sm">
+                      {category.eventCount.toLocaleString('fr-FR')} événements
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             )
           })}
         </div>

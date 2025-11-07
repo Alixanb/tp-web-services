@@ -1,7 +1,11 @@
-import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Search } from 'lucide-react'
+import { Input } from '@/components/ui/input'
+import { categoryService } from '@/services/category.service'
+import type { Category } from '@/types/Category'
 import type { EventFilters } from '@/types/Event'
+import { Search, X } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 interface SearchFiltersProps {
   filters: EventFilters
@@ -14,6 +18,41 @@ export function SearchFilters({
   onFiltersChange,
   onSearch,
 }: SearchFiltersProps) {
+  const [categories, setCategories] = useState<Category[]>([])
+  const [showCategories, setShowCategories] = useState(false)
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const data = await categoryService.getCategories()
+        setCategories(data)
+      } catch (error) {
+        console.error('Erreur lors du chargement des catégories:', error)
+      }
+    }
+    loadCategories()
+  }, [])
+
+  const selectedCategoryIds = filters.categoryIds || []
+
+  const toggleCategory = (categoryId: string) => {
+    const newCategoryIds = selectedCategoryIds.includes(categoryId)
+      ? selectedCategoryIds.filter((id) => id !== categoryId)
+      : [...selectedCategoryIds, categoryId]
+
+    onFiltersChange({
+      ...filters,
+      categoryIds: newCategoryIds.length > 0 ? newCategoryIds : undefined,
+    })
+  }
+
+  const clearCategories = () => {
+    onFiltersChange({
+      ...filters,
+      categoryIds: undefined,
+    })
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row gap-3">
@@ -37,7 +76,69 @@ export function SearchFilters({
         </Button>
       </div>
 
-      {/* Advanced filters can be added here */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowCategories(!showCategories)}
+          >
+            Catégories {selectedCategoryIds.length > 0 && `(${selectedCategoryIds.length})`}
+          </Button>
+          {selectedCategoryIds.length > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={clearCategories}
+            >
+              <X className="h-4 w-4 mr-1" />
+              Effacer
+            </Button>
+          )}
+        </div>
+
+        {showCategories && (
+          <div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-2">
+              {categories.map((category) => {
+                const isSelected = selectedCategoryIds.includes(category.id)
+                return (
+                  <button
+                    key={category.id}
+                    type="button"
+                    onClick={() => toggleCategory(category.id)}
+                    className={`px-3 py-2 rounded-md text-sm transition-colors text-center border cursor-pointer ${isSelected
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-background hover:bg-muted'
+                      }`}
+                  >
+                    {category.name}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
+
+        {selectedCategoryIds.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {selectedCategoryIds.map((categoryId) => {
+              const category = categories.find((c) => c.id === categoryId)
+              return (
+                <Badge
+                  key={categoryId}
+                  variant="secondary"
+                  className="cursor-pointer"
+                  onClick={() => toggleCategory(categoryId)}
+                >
+                  {category?.name || categoryId}
+                  <X className="h-3 w-3 ml-1" />
+                </Badge>
+              )
+            })}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

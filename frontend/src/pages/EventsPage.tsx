@@ -8,23 +8,42 @@ import type { Event, EventFilters } from '@/types/Event'
 export function EventsPage() {
   const [searchParams] = useSearchParams()
   const searchQuery = searchParams.get('search')
-  const [filters, setFilters] = useState<EventFilters>(
-    searchQuery ? { search: searchQuery } : {}
-  )
+  const categoryIdsParam = searchParams.get('categoryIds')
+  
+  const getInitialFilters = (): EventFilters => {
+    const filters: EventFilters = {}
+    if (searchQuery) {
+      filters.search = searchQuery
+    }
+    if (categoryIdsParam) {
+      filters.categoryIds = categoryIdsParam.split(',').filter(Boolean)
+    }
+    return filters
+  }
+
+  const [filters, setFilters] = useState<EventFilters>(getInitialFilters())
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const urlSearchQuery = searchParams.get('search')
+    const urlCategoryIds = searchParams.get('categoryIds')
+    
     setFilters((prevFilters) => {
-      if (urlSearchQuery && urlSearchQuery !== prevFilters.search) {
-        return { search: urlSearchQuery }
+      const newFilters: EventFilters = {}
+      
+      if (urlSearchQuery) {
+        newFilters.search = urlSearchQuery
       }
-      if (!urlSearchQuery && prevFilters.search) {
-        return {}
+      
+      if (urlCategoryIds) {
+        newFilters.categoryIds = urlCategoryIds.split(',').filter(Boolean)
       }
-      return prevFilters
+      
+      return newFilters
     })
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [searchParams])
 
   const loadEvents = useCallback(async () => {

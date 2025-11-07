@@ -65,6 +65,7 @@ export class EventService {
     const {
       search,
       categoryId,
+      categoryIds,
       city,
       startDate,
       endDate,
@@ -93,8 +94,22 @@ export class EventService {
     }
 
     // Filter by category
-    if (categoryId) {
-      queryBuilder.andWhere('event.categoryId = :categoryId', { categoryId });
+    let categoryIdsArray: string[] | null = null;
+    
+    if (categoryIds) {
+      if (Array.isArray(categoryIds)) {
+        categoryIdsArray = categoryIds;
+      } else if (typeof categoryIds === 'string') {
+        categoryIdsArray = categoryIds.split(',').filter(Boolean);
+      }
+    } else if (categoryId) {
+      categoryIdsArray = [categoryId];
+    }
+
+    if (categoryIdsArray && categoryIdsArray.length > 0) {
+      queryBuilder.andWhere('event.categoryId IN (:...categoryIds)', {
+        categoryIds: categoryIdsArray,
+      });
     }
 
     // Filter by city

@@ -16,8 +16,8 @@ interface EventCardProps {
   onSelect?: (event: Event) => void
 }
 
-export function EventCard({ event, onSelect }: EventCardProps) {
-  const formatDate = (date: Date) => {
+export function EventCard({ event }: EventCardProps) {
+  const formatDate = (date: Date | string) => {
     return new Date(date).toLocaleDateString('fr-FR', {
       day: 'numeric',
       month: 'short',
@@ -46,8 +46,13 @@ export function EventCard({ event, onSelect }: EventCardProps) {
       </div>
       <CardHeader className="space-y-2 p-4 sm:p-6">
         <div className="flex items-center justify-between">
-          <Badge variant="secondary" className="text-xs">
-            {event.category.name}
+          <Badge variant="secondary" className="text-xs" asChild>
+            <Link
+              to={`/events?categoryIds=${event.category.id}`}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            >
+              {event.category.name}
+            </Link>
           </Badge>
         </div>
         <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors text-base sm:text-lg">

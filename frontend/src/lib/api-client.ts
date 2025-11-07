@@ -100,7 +100,13 @@ export const apiClient = {
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
         if (value !== undefined && value !== null && value !== '') {
-          url.searchParams.append(key, String(value))
+          if (Array.isArray(value)) {
+            value.forEach((item) => {
+              url.searchParams.append(key, String(item))
+            })
+          } else {
+            url.searchParams.append(key, String(value))
+          }
         }
       })
     }

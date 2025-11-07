@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import {
-  Calendar,
-  MapPin,
-  ArrowLeft,
-  Ticket,
-  CheckCircle2,
-} from 'lucide-react'
 import { eventService } from '@/services/event.service'
 import { orderService } from '@/services/order.service'
 import type { Event, TicketCategory } from '@/types/Event'
+import {
+  ArrowLeft,
+  Calendar,
+  CheckCircle2,
+  MapPin,
+  Ticket,
+} from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 export function TicketReservationPage() {
   const { ticketCategoryId } = useParams<{ ticketCategoryId: string }>()
@@ -70,10 +70,10 @@ export function TicketReservationPage() {
       setTimeout(() => {
         navigate('/my-orders')
       }, 2000)
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Erreur lors de la réservation:', error)
       const errorMessage =
-        error?.response?.data?.message ||
+        (error as { response?: { data?: { message?: string } } })?.response?.data?.message ||
         'Erreur lors de la réservation. Veuillez réessayer.'
       alert(errorMessage)
     } finally {
@@ -140,11 +140,10 @@ export function TicketReservationPage() {
         <div className="space-y-6">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <Badge variant="secondary">{event.category.name}</Badge>
-              <Badge
-                variant={event.status === 'PUBLISHED' ? 'default' : 'outline'}
-              >
-                {event.status}
+              <Badge variant="secondary" asChild>
+                <Link to={`/events?categoryIds=${event.category.id}`}>
+                  {event.category.name}
+                </Link>
               </Badge>
             </div>
 
