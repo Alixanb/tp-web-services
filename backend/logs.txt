@@ -86,3 +86,127 @@ Client 2: client2@example.com / password123
    📚 Swagger Docs: http://localhost:3000/api/docs
    ================================
 
+[2J[3J[H[[90m9:57:21 AM[0m] File change detected. Starting incremental compilation...
+
+[[90m9:57:22 AM[0m] Found 0 errors. Watching for file changes.
+
+[Nest] 13879  - 11/07/2025, 9:57:26 AM     LOG [NestFactory] Starting Nest application...
+[Nest] 13879  - 11/07/2025, 9:57:26 AM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +115ms
+[Nest] 13879  - 11/07/2025, 9:57:26 AM     LOG [InstanceLoader] PassportModule dependencies initialized +1ms
+[Nest] 13879  - 11/07/2025, 9:57:26 AM     LOG [InstanceLoader] JwtModule dependencies initialized +0ms
+[Nest] 13879  - 11/07/2025, 9:57:27 AM   ERROR [TypeOrmModule] Unable to connect to the database. Retrying (1)...
+QueryFailedError: duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+    at PostgresQueryRunner.query (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/typeorm@0.3.27_pg@8.16.3_reflect-metadata@0.2.2_ts-node@10.9.2_@types+node@20.19.21_typescript@5.9.3_/node_modules/typeorm/driver/src/driver/postgres/PostgresQueryRunner.ts:325:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at PostgresQueryRunner.executeQueries (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/typeorm@0.3.27_pg@8.16.3_reflect-metadata@0.2.2_ts-node@10.9.2_@types+node@20.19.21_typescript@5.9.3_/node_modules/typeorm/query-runner/src/query-runner/BaseQueryRunner.ts:681:13)
+    at PostgresQueryRunner.createTable (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/typeorm@0.3.27_pg@8.16.3_reflect-metadata@0.2.2_ts-node@10.9.2_@types+node@20.19.21_typescript@5.9.3_/node_modules/typeorm/driver/src/driver/postgres/PostgresQueryRunner.ts:616:9)
+    at RdbmsSchemaBuilder.createNewTables (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/typeorm@0.3.27_pg@8.16.3_reflect-metadata@0.2.2_ts-node@10.9.2_@types+node@20.19.21_typescript@5.9.3_/node_modules/typeorm/schema-builder/src/schema-builder/RdbmsSchemaBuilder.ts:635:13)
+    at RdbmsSchemaBuilder.executeSchemaSyncOperationsInProperOrder (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/typeorm@0.3.27_pg@8.16.3_reflect-metadata@0.2.2_ts-node@10.9.2_@types+node@20.19.21_typescript@5.9.3_/node_modules/typeorm/schema-builder/src/schema-builder/RdbmsSchemaBuilder.ts:225:9)
+    at RdbmsSchemaBuilder.build (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/typeorm@0.3.27_pg@8.16.3_reflect-metadata@0.2.2_ts-node@10.9.2_@types+node@20.19.21_typescript@5.9.3_/node_modules/typeorm/schema-builder/src/schema-builder/RdbmsSchemaBuilder.ts:95:13)
+    at DataSource.synchronize (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/typeorm@0.3.27_pg@8.16.3_reflect-metadata@0.2.2_ts-node@10.9.2_@types+node@20.19.21_typescript@5.9.3_/node_modules/typeorm/data-source/src/data-source/DataSource.ts:340:9)
+    at DataSource.initialize (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/typeorm@0.3.27_pg@8.16.3_reflect-metadata@0.2.2_ts-node@10.9.2_@types+node@20.19.21_typescript@5.9.3_/node_modules/typeorm/data-source/src/data-source/DataSource.ts:278:43)
+[Nest] 13879  - 11/07/2025, 9:57:30 AM   ERROR [TypeOrmModule] Unable to connect to the database. Retrying (2)...
+QueryFailedError: duplicate key value violates unique constraint "pg_type_typname_nsp_index"
+    at PostgresQueryRunner.query (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/typeorm@0.3.27_pg@8.16.3_reflect-metadata@0.2.2_ts-node@10.9.2_@types+node@20.19.21_typescript@5.9.3_/node_modules/typeorm/driver/src/driver/postgres/PostgresQueryRunner.ts:325:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at PostgresQueryRunner.executeQueries (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/typeorm@0.3.27_pg@8.16.3_reflect-metadata@0.2.2_ts-node@10.9.2_@types+node@20.19.21_typescript@5.9.3_/node_modules/typeorm/query-runner/src/query-runner/BaseQueryRunner.ts:681:13)
+    at PostgresQueryRunner.createTable (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/typeorm@0.3.27_pg@8.16.3_reflect-metadata@0.2.2_ts-node@10.9.2_@types+node@20.19.21_typescript@5.9.3_/node_modules/typeorm/driver/src/driver/postgres/PostgresQueryRunner.ts:616:9)
+    at RdbmsSchemaBuilder.createNewTables (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/typeorm@0.3.27_pg@8.16.3_reflect-metadata@0.2.2_ts-node@10.9.2_@types+node@20.19.21_typescript@5.9.3_/node_modules/typeorm/schema-builder/src/schema-builder/RdbmsSchemaBuilder.ts:635:13)
+    at RdbmsSchemaBuilder.executeSchemaSyncOperationsInProperOrder (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/typeorm@0.3.27_pg@8.16.3_reflect-metadata@0.2.2_ts-node@10.9.2_@types+node@20.19.21_typescript@5.9.3_/node_modules/typeorm/schema-builder/src/schema-builder/RdbmsSchemaBuilder.ts:225:9)
+    at RdbmsSchemaBuilder.build (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/typeorm@0.3.27_pg@8.16.3_reflect-metadata@0.2.2_ts-node@10.9.2_@types+node@20.19.21_typescript@5.9.3_/node_modules/typeorm/schema-builder/src/schema-builder/RdbmsSchemaBuilder.ts:95:13)
+    at DataSource.synchronize (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/typeorm@0.3.27_pg@8.16.3_reflect-metadata@0.2.2_ts-node@10.9.2_@types+node@20.19.21_typescript@5.9.3_/node_modules/typeorm/data-source/src/data-source/DataSource.ts:340:9)
+    at DataSource.initialize (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/typeorm@0.3.27_pg@8.16.3_reflect-metadata@0.2.2_ts-node@10.9.2_@types+node@20.19.21_typescript@5.9.3_/node_modules/typeorm/data-source/src/data-source/DataSource.ts:278:43)
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [InstanceLoader] TypeOrmCoreModule dependencies initialized +3133ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +1ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [InstanceLoader] TypeOrmModule dependencies initialized +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [InstanceLoader] AppModule dependencies initialized +2ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [InstanceLoader] AuthModule dependencies initialized +2ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [InstanceLoader] EventModule dependencies initialized +1ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [InstanceLoader] UsersModule dependencies initialized +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [InstanceLoader] VenuesModule dependencies initialized +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [InstanceLoader] CategoriesModule dependencies initialized +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [InstanceLoader] OrdersModule dependencies initialized +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [InstanceLoader] TicketsModule dependencies initialized +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RoutesResolver] AppController {/api}: +36ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api, GET} route +3ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RoutesResolver] EventController {/api/events}: +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/events, GET} route +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/event ELIFECYCLE  Command failed.
+79  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/events, POST} route +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/events/:id, PUT} route +1ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/events/:id, DELETE} route +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RoutesResolver] AuthController {/api/auth}: +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/auth/register, POST} route +1ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/auth/login, POST} route +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RoutesResolver] UsersController {/api/users}: +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/users, GET} route +1ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/users/:id, GET} route +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/users/:id, PUT} route +1ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/users/:id/orders, GET} route +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RoutesResolver] VenuesController {/api/venues}: +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/venues, GET} route +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/venues/:id, GET} route +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/venues, POST} route +1ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/venues/:id, PUT} route +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/venues/:id, DELETE} route +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RoutesResolver] CategoriesController {/api/categories}: +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/categories, GET} route +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/categories/:id, GET} route +1ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/categories, POST} route +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/categories/:id, PUT} route +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RoutesResolver] OrdersController {/api/orders}: +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/orders, POST} route +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/orders, GET} route +1ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/orders/:id, GET} route +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RoutesResolver] TicketsController {/api/tickets}: +1ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/tickets/:id, GET} route +0ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [RouterExplorer] Mapped {/api/tickets/:id, PUT} route +0ms
+🌱 Starting database seeding...
+Creating users...
+✓ Users created
+Creating categories...
+✓ Categories created
+Creating venues...
+✓ Venues created
+Creating events...
+✓ Events created
+
+✅ Database seeding completed!
+
+📧 Test accounts created:
+Admin: admin@eventpass.com / password123
+Organizer 1: organizer1@eventpass.com / password123
+Organizer 2: organizer2@eventpass.com / password123
+Client 1: client1@example.com / password123
+Client 2: client2@example.com / password123
+[Nest] 13879  - 11/07/2025, 9:57:33 AM     LOG [NestApplication] Nest application successfully started +155ms
+[Nest] 13879  - 11/07/2025, 9:57:33 AM   ERROR [NestApplication] Error: listen EADDRINUSE: address already in use :::3000 +3ms
+node:internal/errors:496
+    ErrorCaptureStackTrace(err);
+    ^
+
+Error: listen EADDRINUSE: address already in use :::3000
+    at __node_internal_captureLargerStackTrace (node:internal/errors:496:5)
+    at __node_internal_uvExceptionWithHostPort (node:internal/errors:593:12)
+    at Server.setupListenHandle [as _listen2] (node:net:1817:16)
+    at listenInCluster (node:net:1865:12)
+    at Server.listen (node:net:1953:7)
+    at ExpressAdapter.listen (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/@nestjs+platform-express@10.4.20_@nestjs+common@10.4.20_class-transformer@0.5.1_class-v_cd252036683558c8e092e5ab8d217a0d/node_modules/@nestjs/platform-express/adapters/express-adapter.js:95:32)
+    at /Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/@nestjs+core@10.4.20_@nestjs+common@10.4.20_class-transformer@0.5.1_class-validator@0.1_50182a808b7b5eee0e7c4810d24dc688/node_modules/@nestjs/core/nest-application.js:183:30
+    at new Promise (<anonymous>)
+    at NestApplication.listen (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/node_modules/.pnpm/@nestjs+core@10.4.20_@nestjs+common@10.4.20_class-transformer@0.5.1_class-validator@0.1_50182a808b7b5eee0e7c4810d24dc688/node_modules/@nestjs/core/nest-application.js:173:16)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at bootstrap (/Users/minhnguyen/Desktop/Cours/M2/tp-web-services/backend/src/main.ts:63:3) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 3000
+}
+
+Node.js v18.20.8
+ ELIFECYCLE  Command failed.

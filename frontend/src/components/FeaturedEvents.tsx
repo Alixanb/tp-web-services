@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import {
   Card,
-  CardContent,
+  // CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Calendar, MapPin, Users, ArrowUpRight } from 'lucide-react'
+import { Calendar, ArrowUpRight } from 'lucide-react'
 import { eventService } from '@/services/event.service'
 import type { Event } from '@/types/Event'
 
@@ -52,7 +52,10 @@ export function FeaturedEvents() {
         setFeaturedEvents(sorted)
       } catch (error) {
         if (!canceled) {
-          console.error('Erreur lors du chargement des événements en vedette:', error)
+          console.error(
+            'Erreur lors du chargement des événements en vedette:',
+            error
+          )
         }
       } finally {
         if (!canceled) {
@@ -69,10 +72,10 @@ export function FeaturedEvents() {
   }, [])
 
   const renderCard = (event: Event) => {
-    const availableTickets = event.ticketCategories.reduce(
-      (sum, category) => sum + (category.availableStock || 0),
-      0
-    )
+    // const availableTickets = event.ticketCategories.reduce(
+    //   (sum, category) => sum + (category.availableStock || 0),
+    //   0
+    // )
     const priceList = event.ticketCategories.map((category) => category.price)
     const minPrice = priceList.length > 0 ? Math.min(...priceList) : 0
     return (
@@ -80,7 +83,7 @@ export function FeaturedEvents() {
         key={event.id}
         className="group overflow-hidden transition-all hover:shadow-xl"
       >
-        <div className="aspect-video bg-gradient-to-br from-primary/15 to-primary/5">
+        <div className="bg-gradient-to-br from-primary/15 to-primary/5 aspect-[292/194]">
           {event.imageUrl ? (
             <img
               src={event.imageUrl}
@@ -93,7 +96,7 @@ export function FeaturedEvents() {
             </div>
           )}
         </div>
-        <CardHeader className="space-y-2 p-4 sm:p-6">
+        <CardHeader className="">
           <div className="flex items-center justify-between">
             {event.category ? (
               <Badge variant="secondary" className="text-xs" asChild>
@@ -116,12 +119,12 @@ export function FeaturedEvents() {
           <CardTitle className="line-clamp-2 text-base transition-colors group-hover:text-primary sm:text-lg">
             {event.title}
           </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2 p-4 pt-0 sm:space-y-3 sm:p-6">
           <div className="flex items-center gap-2 text-xs text-muted-foreground sm:text-sm">
             <Calendar className="h-3 w-3 flex-shrink-0 sm:h-4 sm:w-4" />
             <span>{formatDate(event.startDate)}</span>
           </div>
+        </CardHeader>
+        {/* <CardContent className="space-y-2 p-4 pt-0 sm:space-y-3 sm:p-6">
           <div className="flex items-center gap-2 text-xs text-muted-foreground sm:text-sm">
             <MapPin className="h-3 w-3 flex-shrink-0 sm:h-4 sm:w-4" />
             <span className="truncate">
@@ -134,18 +137,18 @@ export function FeaturedEvents() {
               {availableTickets.toLocaleString('fr-FR')} places disponibles
             </span>
           </div>
-        </CardContent>
+        </CardContent> */}
         <CardFooter className="flex items-center justify-between p-4 pt-0 sm:p-6">
           <div>
-            <div className="text-xs text-muted-foreground sm:text-sm">À partir de</div>
+            <div className="text-xs text-muted-foreground sm:text-sm">
+              À partir de
+            </div>
             <div className="text-xl font-bold text-primary sm:text-2xl">
               {formatPrice(minPrice)}
             </div>
           </div>
           <Button asChild size="sm" className="text-xs sm:text-sm">
-            <Link to="/events">
-              Réserver
-            </Link>
+            <Link to="/events">Réserver</Link>
           </Button>
         </CardFooter>
       </Card>
@@ -161,7 +164,11 @@ export function FeaturedEvents() {
             Sélection dynamique des prochains événements publiés
           </p>
         </div>
-        <Button asChild variant="outline" className="self-start text-sm sm:self-auto">
+        <Button
+          asChild
+          variant="outline"
+          className="self-start text-sm sm:self-auto"
+        >
           <Link to="/events">
             <ArrowUpRight className="h-4 w-4" />
             Voir tout
