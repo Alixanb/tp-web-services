@@ -1,13 +1,15 @@
-import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
 import { EventCard } from '@/components/EventCard'
+import { Button } from '@/components/ui/button'
 import { eventService } from '@/services/event.service'
-import { Plus } from 'lucide-react'
 import type { Event } from '@/types/Event'
+import { Plus } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export function MyEventsPage() {
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
     loadMyEvents()
@@ -38,7 +40,7 @@ export function MyEventsPage() {
               Gérez vos événements et consultez les statistiques
             </p>
           </div>
-          <Button>
+          <Button onClick={() => navigate('/organizer/events/new')}>
             <Plus className="h-4 w-4 mr-2" />
             Créer un événement
           </Button>
@@ -60,7 +62,7 @@ export function MyEventsPage() {
             <p className="text-muted-foreground mb-4">
               Vous n'avez pas encore créé d'événements.
             </p>
-            <Button>
+            <Button onClick={() => navigate('/organizer/events/new')}>
               <Plus className="h-4 w-4 mr-2" />
               Créer votre premier événement
             </Button>

@@ -24,12 +24,14 @@ import {
   Calendar,
   Edit,
   MapPin,
+  Plus,
   RefreshCw,
   Trash2,
   TrendingUp,
   Users,
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function formatCurrency(value: number) {
   return new Intl.NumberFormat('fr-FR', {
@@ -70,6 +72,7 @@ export function AdminDashboard() {
     endDate: '',
     status: 'DRAFT' as EventStatus,
   })
+  const navigate = useNavigate()
 
   const retrieveDashboard = useCallback(async () => {
     setLoading(true)
@@ -334,6 +337,10 @@ export function AdminDashboard() {
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
+            <Button onClick={() => navigate('/organizer/events/new')}>
+              <Plus className="h-4 w-4" />
+              Créer un événement
+            </Button>
             <Button
               variant="outline"
               onClick={retrieveDashboard}

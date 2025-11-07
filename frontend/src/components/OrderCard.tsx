@@ -1,3 +1,5 @@
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -5,10 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Calendar, Ticket } from 'lucide-react'
 import type { Order } from '@/types/Order'
+import { Calendar, Ticket } from 'lucide-react'
 
 interface OrderCardProps {
   order: Order
@@ -87,7 +87,7 @@ export function OrderCard({ order, onViewDetails }: OrderCardProps) {
         <CardTitle className="line-clamp-2 text-base transition-colors group-hover:text-primary sm:text-lg">
           {event.title}
         </CardTitle>
-        <div className="flex items-center gap-2 text-xs text-muted-foreground sm:text-sm">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground  sm:text-sm">
           <Calendar className="h-3 w-3 flex-shrink-0 sm:h-4 sm:w-4" />
           <span>{formatDate(event.startDate)}</span>
         </div>

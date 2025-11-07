@@ -12,6 +12,7 @@ import { MyOrdersPage } from '@/pages/MyOrdersPage'
 import { MyTicketsPage } from '@/pages/MyTicketsPage'
 import { LoginPage } from '@/pages/LoginPage'
 import { MyEventsPage } from '@/pages/organizer/MyEventsPage'
+import { CreateEventPage } from '@/pages/organizer/CreateEventPage'
 import { EventSalesPage } from '@/pages/organizer/EventSalesPage'
 import { AdminDashboard } from '@/pages/admin/AdminDashboard'
 
@@ -73,6 +74,14 @@ export function AppRoutes() {
               element={
                 <ProtectedRoute allowedRoles={['ORGANIZER', 'ADMIN']}>
                   <MyEventsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="events/new"
+              element={
+                <ProtectedRoute allowedRoles={['ORGANIZER', 'ADMIN']}>
+                  <CreateEventPage />
                 </ProtectedRoute>
               }
             />
