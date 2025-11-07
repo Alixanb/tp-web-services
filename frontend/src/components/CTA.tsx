@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { Link } from 'react-router-dom'
 
 export function CTA() {
   return (
@@ -16,11 +17,12 @@ export function CTA() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-2 sm:pt-4 max-w-md sm:max-w-none mx-auto">
             <Button
+              asChild
               size="lg"
               variant="default"
               className="text-sm sm:text-base w-full sm:w-auto"
             >
-              Devenir organisateur
+              <Link to="/login">Devenir organisateur</Link>
             </Button>
             <Button
               size="lg"

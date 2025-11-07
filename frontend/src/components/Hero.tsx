@@ -1,13 +1,110 @@
-import { useState, FormEvent } from 'react'
+import { useState, useEffect, useRef, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Search, Star } from 'lucide-react'
+import { eventService } from '@/services/event.service'
+import { venueService } from '@/services/venue.service'
+import { orderService } from '@/services/order.service'
+
+// Fonction de formatage de devise
+function formatCurrency(value: number) {
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency: 'EUR',
+    maximumFractionDigits: 0,
+  }).format(value)
+}
+
+// Hook pour animer le compteur
+function useCountUp(end: number, duration = 2000, start = 0) {
+  const [count, setCount] = useState(start)
+  const countRef = useRef(start)
+  const rafRef = useRef<number | undefined>(undefined)
+
+  useEffect(() => {
+    const startTime = Date.now()
+    const animate = () => {
+      const now = Date.now()
+      const progress = Math.min((now - startTime) / duration, 1)
+
+      // Easing function pour un effet plus fluide
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4)
+      const currentCount = Math.floor(start + (end - start) * easeOutQuart)
+
+      if (currentCount !== countRef.current) {
+        countRef.current = currentCount
+        setCount(currentCount)
+      }
+
+      if (progress < 1) {
+        rafRef.current = requestAnimationFrame(animate)
+      } else {
+        setCount(end)
+      }
+    }
+
+    rafRef.current = requestAnimationFrame(animate)
+
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+      }
+    }
+  }, [end, duration, start])
+
+  return count
+}
 
 export function Hero() {
   const [searchQuery, setSearchQuery] = useState('')
+  const [stats, setStats] = useState({
+    revenue: 0,
+    publishedEvents: 0,
+    activeVenues: 0,
+  })
   const navigate = useNavigate()
+
+  // Chargement des données au montage du composant
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        const [fetchedEvents, fetchedVenues, fetchedOrders] = await Promise.all(
+          [
+            eventService.getEvents({ includeAllStatuses: false }),
+            venueService.getVenues(),
+            orderService.getAllOrders(),
+          ]
+        )
+
+        // Calcul des statistiques
+        const totalRevenue = fetchedOrders.reduce(
+          (sum, order) => sum + (order.totalAmount || 0),
+          0
+        )
+        const publishedEvents = fetchedEvents.filter(
+          (event) => event.status === 'PUBLISHED'
+        )
+
+        setStats({
+          revenue: totalRevenue,
+          publishedEvents: publishedEvents.length,
+          activeVenues: fetchedVenues.length,
+        })
+      } catch (error) {
+        console.error('Erreur lors du chargement des statistiques:', error)
+        // En cas d'erreur, on garde les valeurs par défaut (0)
+      }
+    }
+
+    loadStats()
+  }, [])
+
+  // Compteurs animés avec les vraies stats dynamiques
+  const totalRevenue = useCountUp(stats.revenue)
+  const eventsCount = useCountUp(stats.publishedEvents)
+  const venuesCount = useCountUp(stats.activeVenues)
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -57,30 +154,30 @@ export function Hero() {
           </Button>
         </form>
 
-        {/* Stats */}
+        {/* Stats avec compteurs animés */}
         <div className="grid grid-cols-3 gap-4 sm:gap-6 md:gap-8 pt-8 sm:pt-10 md:pt-12">
           <div className="space-y-1 sm:space-y-2">
             <div className="text-2xl sm:text-3xl font-bold text-primary">
-              1.2M+
+              {formatCurrency(totalRevenue)}
             </div>
             <div className="text-xs sm:text-sm text-muted-foreground">
-              Billets vendus
+              Revenus cumulés
             </div>
           </div>
           <div className="space-y-1 sm:space-y-2">
             <div className="text-2xl sm:text-3xl font-bold text-primary">
-              5K+
+              {eventsCount}
             </div>
             <div className="text-xs sm:text-sm text-muted-foreground">
-              Événements
+              Événements publiés
             </div>
           </div>
           <div className="space-y-1 sm:space-y-2">
             <div className="text-2xl sm:text-3xl font-bold text-primary">
-              500+
+              {venuesCount}
             </div>
             <div className="text-xs sm:text-sm text-muted-foreground">
-              Organisateurs
+              Lieux actifs
             </div>
           </div>
         </div>

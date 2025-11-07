@@ -81,7 +81,9 @@ export function AdminDashboard() {
   })
   const [categoryDialogOpen, setCategoryDialogOpen] = useState(false)
   const [venueDialogOpen, setVenueDialogOpen] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  )
   const [selectedVenue, setSelectedVenue] = useState<Venue | null>(null)
   const [categoryForm, setCategoryForm] = useState({
     name: '',
@@ -101,7 +103,9 @@ export function AdminDashboard() {
   const [savingVenue, setSavingVenue] = useState(false)
   const [categoryError, setCategoryError] = useState<string | null>(null)
   const [venueError, setVenueError] = useState<string | null>(null)
-  const [deletingCategoryId, setDeletingCategoryId] = useState<string | null>(null)
+  const [deletingCategoryId, setDeletingCategoryId] = useState<string | null>(
+    null
+  )
   const [deletingVenueId, setDeletingVenueId] = useState<string | null>(null)
   const [ticketLookupId, setTicketLookupId] = useState('')
   const [ticketLookupLoading, setTicketLookupLoading] = useState(false)
@@ -235,11 +239,16 @@ export function AdminDashboard() {
       const updated = await eventService.updateEvent(eventId, { status })
       setEvents((current) =>
         current.map((eventItem) =>
-          eventItem.id === eventId ? { ...eventItem, status: updated.status } : eventItem
+          eventItem.id === eventId
+            ? { ...eventItem, status: updated.status }
+            : eventItem
         )
       )
     } catch (err) {
-      console.error("Erreur lors de la mise à jour du statut de l'événement:", err)
+      console.error(
+        "Erreur lors de la mise à jour du statut de l'événement:",
+        err
+      )
       if (err instanceof ApiError && err.statusCode === 401) {
         alert('Votre session a expiré. Veuillez vous reconnecter.')
       }
@@ -327,7 +336,9 @@ export function AdminDashboard() {
       const updated = await eventService.updateEvent(selectedEvent.id, payload)
       setEvents((current) =>
         current.map((eventItem) =>
-          eventItem.id === selectedEvent.id ? { ...eventItem, ...updated } : eventItem
+          eventItem.id === selectedEvent.id
+            ? { ...eventItem, ...updated }
+            : eventItem
         )
       )
       handleEditDialogToggle(false)
@@ -361,17 +372,22 @@ export function AdminDashboard() {
     setDeletingEventId(eventId)
     try {
       await eventService.deleteEvent(eventId)
-      setEvents((current) => current.filter((eventItem) => eventItem.id !== eventId))
+      setEvents((current) =>
+        current.filter((eventItem) => eventItem.id !== eventId)
+      )
       setError(null)
       try {
         await retrieveDashboard()
       } catch (refreshErr) {
-        console.error('Impossible de rafraîchir les données après suppression:', refreshErr)
+        console.error(
+          'Impossible de rafraîchir les données après suppression:',
+          refreshErr
+        )
       }
     } catch (err) {
-      console.error('Erreur lors de la suppression de l\'événement:', err)
+      console.error("Erreur lors de la suppression de l'événement:", err)
       if (err instanceof ApiError) {
-        setError(err.message || "Suppression impossible.")
+        setError(err.message || 'Suppression impossible.')
       } else {
         setError('Suppression impossible.')
       }
@@ -435,10 +451,15 @@ export function AdminDashboard() {
         icon: categoryForm.icon.trim() || undefined,
       }
       if (selectedCategory) {
-        const updated = await categoryService.updateCategory(selectedCategory.id, payload)
+        const updated = await categoryService.updateCategory(
+          selectedCategory.id,
+          payload
+        )
         setCategories((current) =>
           current.map((categoryItem) =>
-            categoryItem.id === selectedCategory.id ? { ...categoryItem, ...updated } : categoryItem
+            categoryItem.id === selectedCategory.id
+              ? { ...categoryItem, ...updated }
+              : categoryItem
           )
         )
       } else {
@@ -458,7 +479,9 @@ export function AdminDashboard() {
   }
 
   const handleDeleteCategory = async (categoryId: string) => {
-    const targetedCategory = categories.find((categoryItem) => categoryItem.id === categoryId)
+    const targetedCategory = categories.find(
+      (categoryItem) => categoryItem.id === categoryId
+    )
     if (!targetedCategory) {
       return
     }
@@ -471,7 +494,9 @@ export function AdminDashboard() {
     setDeletingCategoryId(categoryId)
     try {
       await categoryService.deleteCategory(categoryId)
-      setCategories((current) => current.filter((categoryItem) => categoryItem.id !== categoryId))
+      setCategories((current) =>
+        current.filter((categoryItem) => categoryItem.id !== categoryId)
+      )
     } catch (err) {
       console.error('Erreur lors de la suppression de la catégorie:', err)
       if (err instanceof ApiError) {
@@ -523,7 +548,14 @@ export function AdminDashboard() {
   }
 
   const handleVenueFieldChange = (
-    field: 'name' | 'address' | 'city' | 'postalCode' | 'country' | 'capacity' | 'description',
+    field:
+      | 'name'
+      | 'address'
+      | 'city'
+      | 'postalCode'
+      | 'country'
+      | 'capacity'
+      | 'description',
     value: string
   ) => {
     setVenueForm((current) => ({ ...current, [field]: value }))
@@ -558,10 +590,15 @@ export function AdminDashboard() {
         description: venueForm.description.trim() || undefined,
       }
       if (selectedVenue) {
-        const updated = await venueService.updateVenue(selectedVenue.id, payload)
+        const updated = await venueService.updateVenue(
+          selectedVenue.id,
+          payload
+        )
         setVenues((current) =>
           current.map((venueItem) =>
-            venueItem.id === selectedVenue.id ? { ...venueItem, ...updated } : venueItem
+            venueItem.id === selectedVenue.id
+              ? { ...venueItem, ...updated }
+              : venueItem
           )
         )
       } else {
@@ -594,7 +631,9 @@ export function AdminDashboard() {
     setDeletingVenueId(venueId)
     try {
       await venueService.deleteVenue(venueId)
-      setVenues((current) => current.filter((venueItem) => venueItem.id !== venueId))
+      setVenues((current) =>
+        current.filter((venueItem) => venueItem.id !== venueId)
+      )
     } catch (err) {
       console.error('Erreur lors de la suppression du lieu:', err)
       if (err instanceof ApiError) {
@@ -674,7 +713,9 @@ export function AdminDashboard() {
       <div className="space-y-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold">Tableau de bord Admin</h1>
+            <h1 className="text-3xl md:text-4xl font-bold">
+              Tableau de bord Admin
+            </h1>
             <p className="text-muted-foreground mt-2">
               Vue consolidée des performances de la plateforme
             </p>
@@ -716,7 +757,9 @@ export function AdminDashboard() {
           {stats.map((stat) => (
             <Card key={stat.label}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{stat.label}</CardTitle>
+                <CardTitle className="text-sm font-medium">
+                  {stat.label}
+                </CardTitle>
                 <stat.icon className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
@@ -769,7 +812,9 @@ export function AdminDashboard() {
                         return (
                           <tr key={eventItem.id} className="align-top">
                             <td className="py-3 pr-4">
-                              <div className="font-medium">{eventItem.title}</div>
+                              <div className="font-medium">
+                                {eventItem.title}
+                              </div>
                               <div className="text-xs text-muted-foreground">
                                 {formatDateTime(eventItem.startDate)}
                               </div>
@@ -787,7 +832,8 @@ export function AdminDashboard() {
                                 {soldStock.toLocaleString('fr-FR')} vendus
                               </div>
                               <div className="text-xs text-muted-foreground">
-                                {remainingStock.toLocaleString('fr-FR')} restants sur{' '}
+                                {remainingStock.toLocaleString('fr-FR')}{' '}
+                                restants sur{' '}
                                 {totalStock.toLocaleString('fr-FR')}
                               </div>
                             </td>
@@ -822,12 +868,16 @@ export function AdminDashboard() {
                                 <Button
                                   size="sm"
                                   variant="destructive"
-                                  onClick={() => handleDeleteEvent(eventItem.id)}
+                                  onClick={() =>
+                                    handleDeleteEvent(eventItem.id)
+                                  }
                                   disabled={deletingEventId === eventItem.id}
                                 >
-                                  {deletingEventId === eventItem.id
-                                    ? <Loader size="small" variant="white" />
-                                    : <Trash2 />}
+                                  {deletingEventId === eventItem.id ? (
+                                    <Loader size="small" variant="white" />
+                                  ) : (
+                                    <Trash2 />
+                                  )}
                                 </Button>
                               </div>
                             </td>
@@ -845,9 +895,7 @@ export function AdminDashboard() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Dernières commandes</CardTitle>
-                <Badge variant="outline">
-                  {formatCurrency(totalRevenue)}
-                </Badge>
+                <Badge variant="outline">{formatCurrency(totalRevenue)}</Badge>
               </CardHeader>
               <CardContent className="space-y-3">
                 {loading && !hasLoaded ? (
@@ -992,7 +1040,9 @@ export function AdminDashboard() {
                               <Button
                                 size="sm"
                                 variant="destructive"
-                                onClick={() => handleDeleteCategory(category.id)}
+                                onClick={() =>
+                                  handleDeleteCategory(category.id)
+                                }
                                 disabled={deletingCategoryId === category.id}
                               >
                                 {deletingCategoryId === category.id ? (
@@ -1211,7 +1261,9 @@ export function AdminDashboard() {
             <DialogTitle>Modifier l'événement</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            {editError && <p className="text-sm text-destructive">{editError}</p>}
+            {editError && (
+              <p className="text-sm text-destructive">{editError}</p>
+            )}
             <div className="space-y-2">
               <label className="text-sm font-medium" htmlFor="event-title">
                 Titre
@@ -1219,17 +1271,24 @@ export function AdminDashboard() {
               <Input
                 id="event-title"
                 value={editForm.title}
-                onChange={(evt) => handleEditFieldChange('title', evt.target.value)}
+                onChange={(evt) =>
+                  handleEditFieldChange('title', evt.target.value)
+                }
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium" htmlFor="event-description">
+              <label
+                className="text-sm font-medium"
+                htmlFor="event-description"
+              >
                 Description
               </label>
               <textarea
                 id="event-description"
                 value={editForm.description}
-                onChange={(evt) => handleEditFieldChange('description', evt.target.value)}
+                onChange={(evt) =>
+                  handleEditFieldChange('description', evt.target.value)
+                }
                 className="min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
               />
             </div>
@@ -1242,7 +1301,9 @@ export function AdminDashboard() {
                   id="event-start"
                   type="datetime-local"
                   value={editForm.startDate}
-                  onChange={(evt) => handleEditFieldChange('startDate', evt.target.value)}
+                  onChange={(evt) =>
+                    handleEditFieldChange('startDate', evt.target.value)
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -1253,7 +1314,9 @@ export function AdminDashboard() {
                   id="event-end"
                   type="datetime-local"
                   value={editForm.endDate}
-                  onChange={(evt) => handleEditFieldChange('endDate', evt.target.value)}
+                  onChange={(evt) =>
+                    handleEditFieldChange('endDate', evt.target.value)
+                  }
                 />
               </div>
             </div>
@@ -1265,7 +1328,10 @@ export function AdminDashboard() {
                 id="event-status"
                 value={editForm.status}
                 onChange={(evt) =>
-                  handleEditFieldChange('status', evt.target.value as EventStatus)
+                  handleEditFieldChange(
+                    'status',
+                    evt.target.value as EventStatus
+                  )
                 }
                 className="rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
               >
@@ -1295,15 +1361,22 @@ export function AdminDashboard() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={categoryDialogOpen} onOpenChange={handleCategoryDialogToggle}>
+      <Dialog
+        open={categoryDialogOpen}
+        onOpenChange={handleCategoryDialogToggle}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
-              {selectedCategory ? 'Modifier la catégorie' : 'Créer une catégorie'}
+              {selectedCategory
+                ? 'Modifier la catégorie'
+                : 'Créer une catégorie'}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            {categoryError && <p className="text-sm text-destructive">{categoryError}</p>}
+            {categoryError && (
+              <p className="text-sm text-destructive">{categoryError}</p>
+            )}
             <div className="space-y-2">
               <label className="text-sm font-medium" htmlFor="category-name">
                 Nom
@@ -1311,7 +1384,9 @@ export function AdminDashboard() {
               <Input
                 id="category-name"
                 value={categoryForm.name}
-                onChange={(evt) => handleCategoryFieldChange('name', evt.target.value)}
+                onChange={(evt) =>
+                  handleCategoryFieldChange('name', evt.target.value)
+                }
               />
             </div>
             <div className="space-y-2">
@@ -1321,23 +1396,34 @@ export function AdminDashboard() {
               <Input
                 id="category-icon"
                 value={categoryForm.icon}
-                onChange={(evt) => handleCategoryFieldChange('icon', evt.target.value)}
+                onChange={(evt) =>
+                  handleCategoryFieldChange('icon', evt.target.value)
+                }
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium" htmlFor="category-description">
+              <label
+                className="text-sm font-medium"
+                htmlFor="category-description"
+              >
                 Description
               </label>
               <textarea
                 id="category-description"
                 value={categoryForm.description}
-                onChange={(evt) => handleCategoryFieldChange('description', evt.target.value)}
+                onChange={(evt) =>
+                  handleCategoryFieldChange('description', evt.target.value)
+                }
                 className="min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={closeCategoryDialog} disabled={savingCategory}>
+            <Button
+              variant="outline"
+              onClick={closeCategoryDialog}
+              disabled={savingCategory}
+            >
               Annuler
             </Button>
             <Button
@@ -1358,7 +1444,9 @@ export function AdminDashboard() {
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            {venueError && <p className="text-sm text-destructive">{venueError}</p>}
+            {venueError && (
+              <p className="text-sm text-destructive">{venueError}</p>
+            )}
             <div className="space-y-2">
               <label className="text-sm font-medium" htmlFor="venue-name">
                 Nom
@@ -1366,7 +1454,9 @@ export function AdminDashboard() {
               <Input
                 id="venue-name"
                 value={venueForm.name}
-                onChange={(evt) => handleVenueFieldChange('name', evt.target.value)}
+                onChange={(evt) =>
+                  handleVenueFieldChange('name', evt.target.value)
+                }
               />
             </div>
             <div className="space-y-2">
@@ -1376,7 +1466,9 @@ export function AdminDashboard() {
               <Input
                 id="venue-address"
                 value={venueForm.address}
-                onChange={(evt) => handleVenueFieldChange('address', evt.target.value)}
+                onChange={(evt) =>
+                  handleVenueFieldChange('address', evt.target.value)
+                }
               />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -1387,7 +1479,9 @@ export function AdminDashboard() {
                 <Input
                   id="venue-city"
                   value={venueForm.city}
-                  onChange={(evt) => handleVenueFieldChange('city', evt.target.value)}
+                  onChange={(evt) =>
+                    handleVenueFieldChange('city', evt.target.value)
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -1397,7 +1491,9 @@ export function AdminDashboard() {
                 <Input
                   id="venue-postal"
                   value={venueForm.postalCode}
-                  onChange={(evt) => handleVenueFieldChange('postalCode', evt.target.value)}
+                  onChange={(evt) =>
+                    handleVenueFieldChange('postalCode', evt.target.value)
+                  }
                 />
               </div>
             </div>
@@ -1409,7 +1505,9 @@ export function AdminDashboard() {
                 <Input
                   id="venue-country"
                   value={venueForm.country}
-                  onChange={(evt) => handleVenueFieldChange('country', evt.target.value)}
+                  onChange={(evt) =>
+                    handleVenueFieldChange('country', evt.target.value)
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -1421,24 +1519,35 @@ export function AdminDashboard() {
                   type="number"
                   min={1}
                   value={venueForm.capacity}
-                  onChange={(evt) => handleVenueFieldChange('capacity', evt.target.value)}
+                  onChange={(evt) =>
+                    handleVenueFieldChange('capacity', evt.target.value)
+                  }
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium" htmlFor="venue-description">
+              <label
+                className="text-sm font-medium"
+                htmlFor="venue-description"
+              >
                 Description
               </label>
               <textarea
                 id="venue-description"
                 value={venueForm.description}
-                onChange={(evt) => handleVenueFieldChange('description', evt.target.value)}
+                onChange={(evt) =>
+                  handleVenueFieldChange('description', evt.target.value)
+                }
                 className="min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40"
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={closeVenueDialog} disabled={savingVenue}>
+            <Button
+              variant="outline"
+              onClick={closeVenueDialog}
+              disabled={savingVenue}
+            >
               Annuler
             </Button>
             <Button
