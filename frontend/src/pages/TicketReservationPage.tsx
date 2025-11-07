@@ -36,11 +36,29 @@ export function TicketReservationPage() {
         )
 
         if (foundEvent) {
-          setEvent(foundEvent)
-          const category = foundEvent.ticketCategories.find(
+          const normalizedEvent: Event = {
+            ...foundEvent,
+            ticketCategories: foundEvent.ticketCategories.map((tc) => ({
+              ...tc,
+              price: Number(tc.price ?? 0),
+              totalStock: Number(tc.totalStock ?? 0),
+              availableStock: Number(tc.availableStock ?? 0),
+            })),
+          }
+          setEvent(normalizedEvent)
+          const category = normalizedEvent.ticketCategories.find(
             (tc) => tc.id === ticketCategoryId
           )
-          setTicketCategory(category || null)
+          setTicketCategory(
+            category
+              ? {
+                ...category,
+                price: Number(category.price ?? 0),
+                totalStock: Number(category.totalStock ?? 0),
+                availableStock: Number(category.availableStock ?? 0),
+              }
+              : null
+          )
         }
       } catch (error) {
         console.error('Erreur lors du chargement:', error)
@@ -57,12 +75,17 @@ export function TicketReservationPage() {
 
     setReserving(true)
     try {
+      const priceValue = Number(ticketCategory.price)
+      if (!Number.isFinite(priceValue) || priceValue < 0) {
+        throw new Error('Prix de billet invalide')
+      }
+
       await orderService.createOrder({
         items: [
           {
             ticketCategoryId: ticketCategory.id,
             quantity: 1,
-            price: ticketCategory.price,
+            price: priceValue,
           },
         ],
       })

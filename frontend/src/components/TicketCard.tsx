@@ -1,8 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Calendar, MapPin, QrCode, Ticket as TicketIcon } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { Ticket } from '@/types/Ticket'
+import { Calendar, MapPin, QrCode, Ticket as TicketIcon } from 'lucide-react'
 
 interface TicketCardProps {
   ticket: Ticket
@@ -54,7 +54,7 @@ export function TicketCard({ ticket, onViewQR }: TicketCardProps) {
 
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Calendar className="h-4 w-4 flex-shrink-0" />
-            <span>{formatDate(ticket.event.startDate)}</span>
+            <span>{ticket.event.startDate}</span>
           </div>
 
           <div className="flex items-center gap-2 text-sm text-muted-foreground">

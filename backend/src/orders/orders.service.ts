@@ -77,8 +77,16 @@ export class OrdersService {
           );
         }
 
+        const categoryPrice = Number(ticketCategory.price);
+
+        if (!Number.isFinite(categoryPrice)) {
+          throw new BadRequestException(
+            `Invalid price configuration for ${ticketCategory.name}`,
+          );
+        }
+
         // Verify price matches current price
-        if (ticketCategory.price !== item.price) {
+        if (categoryPrice !== item.price) {
           throw new BadRequestException(
             `Price mismatch for ${ticketCategory.name}. Current price is ${ticketCategory.price}`,
           );
@@ -102,10 +110,10 @@ export class OrdersService {
             ticketCategoryId: item.ticketCategoryId,
             eventId: ticketCategory.event.id,
             qrCode,
-            price: item.price,
+            price: categoryPrice,
             status: TicketStatus.ACTIVE,
           });
-          totalAmount += item.price;
+          totalAmount += categoryPrice;
         }
       }
 
