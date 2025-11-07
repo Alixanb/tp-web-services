@@ -1,4 +1,5 @@
 import { Ticket } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 export function Footer() {
   return (
@@ -6,10 +7,10 @@ export function Footer() {
       <div className="container mx-auto px-4 py-8 sm:py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
+            <Link to="/" className="flex items-center gap-2">
               <Ticket className="h-6 w-6 text-primary" />
               <span className="text-xl font-bold">EventPass</span>
-            </div>
+            </Link>
             <p className="text-sm text-muted-foreground">
               Votre plateforme de confiance pour découvrir et réserver des
               billets pour tous les événements.
@@ -17,79 +18,115 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold mb-4">Événements</h3>
+            <h3 className="font-semibold mb-4">Navigation</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Concerts
-                </a>
+                <Link
+                  to="/"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Accueil
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Festivals
-                </a>
+                <Link
+                  to="/events"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Tous les événements
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Conférences
-                </a>
+                <Link
+                  to="/my-tickets"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Mes billets
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Sports
-                </a>
+                <Link
+                  to="/my-orders"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Mes commandes
+                </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-4">Entreprise</h3>
+            <h3 className="font-semibold mb-4">Organisateurs</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  À propos
-                </a>
+                <Link
+                  to="/login"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Devenir organisateur
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Carrières
-                </a>
+                <Link
+                  to="/organizer/events"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Mes événements
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Presse
-                </a>
+                <Link
+                  to="/organizer/events/new"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Créer un événement
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Contact
-                </a>
+                <Link
+                  to="/organizer/sales"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Rapports de ventes
+                </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="font-semibold mb-4">Support</h3>
+            <h3 className="font-semibold mb-4">Mon compte</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Centre d'aide
-                </a>
+                <Link
+                  to="/login"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Connexion
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Conditions d'utilisation
-                </a>
+                <Link
+                  to="/my-orders"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Mes commandes
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Confidentialité
-                </a>
+                <Link
+                  to="/my-tickets"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Mes billets
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-foreground transition-colors">
-                  Sécurité
-                </a>
+                <Link
+                  to="/admin/dashboard"
+                  className="hover:text-foreground transition-colors"
+                >
+                  Espace admin
+                </Link>
               </li>
             </ul>
           </div>
