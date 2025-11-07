@@ -1,21 +1,21 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { Card, CardContent } from '@/components/ui/card'
-import {
-  Music,
-  PartyPopper,
-  Briefcase,
-  TrendingUp,
-  Palette,
-  Clapperboard,
-  Flag,
-  UtensilsCrossed,
-  Tag,
-} from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
 import { categoryService } from '@/services/category.service'
 import { eventService } from '@/services/event.service'
 import type { Category } from '@/types/Category'
+import type { LucideIcon } from 'lucide-react'
+import {
+  Briefcase,
+  Clapperboard,
+  Flag,
+  Music,
+  Palette,
+  PartyPopper,
+  Tag,
+  TrendingUp,
+  UtensilsCrossed,
+} from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 interface CategorySummary extends Category {
   eventCount: number
@@ -115,7 +115,7 @@ export function Categories() {
           Aucune catégorie disponible.
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-5">
           {highlightedCategories.map((category) => {
             const Icon = resolveIcon(category.name)
             return (

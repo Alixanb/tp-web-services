@@ -3,13 +3,39 @@ import { Input } from '@/components/ui/input'
 import { categoryService } from '@/services/category.service'
 import type { Category } from '@/types/Category'
 import type { EventFilters } from '@/types/Event'
-import { Search, X } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+import {
+  Briefcase,
+  Clapperboard,
+  Flag,
+  Music,
+  Palette,
+  PartyPopper,
+  Search,
+  Tag,
+  TrendingUp,
+  Trophy,
+  UtensilsCrossed,
+  X,
+} from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 interface SearchFiltersProps {
   filters: EventFilters
   onFiltersChange: (filters: EventFilters) => void
   onSearch: () => void
+}
+
+const iconMapping: Record<string, LucideIcon> = {
+  music: Music,
+  sports: Trophy,
+  theater: Clapperboard,
+  business: Briefcase,
+  celebration: PartyPopper,
+  art: Palette,
+  politics: Flag,
+  food: UtensilsCrossed,
+  trending: TrendingUp,
 }
 
 export function SearchFilters({
@@ -30,6 +56,12 @@ export function SearchFilters({
     }
     loadCategories()
   }, [])
+
+  const getCategoryIcon = (iconName?: string): LucideIcon => {
+    if (!iconName) return Tag
+    const normalizedName = iconName.toLowerCase().trim()
+    return iconMapping[normalizedName] ?? Tag
+  }
 
   const selectedCategoryIds = filters.categoryIds || []
 
@@ -90,9 +122,10 @@ export function SearchFilters({
                     }`}
                 >
                   <span className="flex items-center justify-center gap-2">
-                    {category.icon ? (
-                      <span aria-hidden>{category.icon}</span>
-                    ) : null}
+                    {(() => {
+                      const Icon = getCategoryIcon(category.icon)
+                      return <Icon className="h-4 w-4" />
+                    })()}
                     <span>{category.name}</span>
                   </span>
                 </button>

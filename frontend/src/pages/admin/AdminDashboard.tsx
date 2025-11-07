@@ -931,9 +931,6 @@ export function AdminDashboard() {
                           {formatDateTime(order.orderDate)}
                         </span>
                       </div>
-                      <div className="mt-1 text-xs text-muted-foreground break-all">
-                        {order.id}
-                      </div>
                       <div className="mt-2 flex items-center justify-between text-sm">
                         <span className="text-muted-foreground">
                           {order.tickets?.length || 0} billets

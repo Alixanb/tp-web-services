@@ -1,5 +1,4 @@
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -107,14 +106,6 @@ export function OrderCard({ order, onViewDetails }: OrderCardProps) {
             {formatPrice(order.totalAmount)}
           </div>
         </div>
-        <Button
-          asChild={false}
-          size="sm"
-          className="text-xs sm:text-sm"
-          onClick={() => onViewDetails?.(order)}
-        >
-          Voir détails
-        </Button>
       </CardFooter>
     </Card>
   )

@@ -57,7 +57,14 @@ export class UsersService {
   async findUserOrders(userId: string) {
     const user = await this.userRepository.findOne({
       where: { id: userId },
-      relations: ['orders', 'orders.tickets', 'orders.tickets.event'],
+      relations: [
+        'orders',
+        'orders.tickets',
+        'orders.tickets.event',
+        'orders.tickets.event.category',
+        'orders.tickets.event.venue',
+        'orders.tickets.ticketCategory',
+      ],
     });
 
     if (!user) {
