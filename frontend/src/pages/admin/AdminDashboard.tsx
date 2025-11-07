@@ -1326,8 +1326,6 @@ export function AdminDashboard() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
-<<<<<<< HEAD
       <Dialog open={orderDialogOpen} onOpenChange={handleOrderDialogToggle}>
         <DialogContent>
           <DialogHeader>
@@ -1385,12 +1383,6 @@ export function AdminDashboard() {
       </Dialog>
 
       <Dialog open={categoryDialogOpen} onOpenChange={handleCategoryDialogToggle}>
-=======
-      <Dialog
-        open={categoryDialogOpen}
-        onOpenChange={handleCategoryDialogToggle}
-      >
->>>>>>> refs/remotes/origin/main
         <DialogContent>
           <DialogHeader>
             <DialogTitle>
