@@ -76,7 +76,7 @@ pnpm dev
 
 - **Code source versionné sur Git** : branches thématiques + commits fréquents avec messages explicites retraçant chaque évolution (features, fix, docs).
 - **Minimum 15 endpoints métier** : 25 routes REST exposées couvrant événements, billets, commandes, utilisateurs et catégories (cf. `backend/ENDPOINTS_CHECKLIST.md`).
-- **CRUD complet sur 4 entités** : opérations Create/Read/Update/Delete opérationnelles pour `events`, `venues`, `categories` et `tickets` via services NestJS + controllers.
+- **CRUD complet sur 4 entités** : opérations Create/Read/Update/Delete opérationnelles pour `events`, `venues`, `categories` et `tickets` via services NestJS + controllers, accessibles depuis les écrans Admin (rôle Administrateur).
 - **Authentification de base** : login JWT avec NestJS Passport, guard `JwtAuthGuard` et rôles Admin/Organisateur/Client appliqués aux routes sensibles.
 - **Recherche & filtrage avancés** : endpoints `/events` et `/orders` acceptent filtres (dates, statut, catégories, texte libre) + pagination côté backend.
 - **Validation robuste & gestion d'erreurs** : DTO validés par `class-validator`, réponses normalisées, `ApiError` côté frontend pour afficher des messages clairs.
