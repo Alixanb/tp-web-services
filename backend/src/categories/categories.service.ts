@@ -63,7 +63,7 @@ export class CategoriesService {
 
     if (category.events && category.events.length > 0) {
       throw new BadRequestException(
-        'Cannot delete category with associated events',
+        'Vous ne pouvez pas supprimé une catégorie qui a des événements associés.',
       );
     }
 

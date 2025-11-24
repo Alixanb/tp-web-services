@@ -54,19 +54,27 @@ function buildHeaders(customHeaders?: HeadersInit): Headers {
  * Gère les erreurs HTTP et les transforme en ApiError
  */
 async function handleResponse<T>(response: Response): Promise<T> {
+  const errorResponse = response.clone()
+
   if (!response.ok) {
     let errorMessage = `HTTP Error ${response.status}`
     let errorType = response.statusText
-    
+
     try {
-      const errorData = await response.json()
+      const errorData = await errorResponse.json()
       errorMessage = errorData.message || errorMessage
       errorType = errorData.error || errorType
     } catch {
-      // Si la réponse n'est pas du JSON, utiliser le message par défaut
+      try {
+        const errorText = await errorResponse.text()
+        if (errorText) {
+          errorMessage = errorText
+        }
+      } catch {
+        // Ignorer si on ne peut pas lire le corps d'erreur
+      }
     }
-    
-    // Si erreur 401, nettoyer le token et rediriger vers login
+
     if (response.status === 401) {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
@@ -74,16 +82,34 @@ async function handleResponse<T>(response: Response): Promise<T> {
         window.location.href = '/login'
       }
     }
-    
+
     throw new ApiError(errorMessage, response.status, errorType)
   }
-  
-  // Pour les réponses 204 No Content
+
   if (response.status === 204) {
     return undefined as T
   }
-  
-  return response.json()
+
+  const contentType = response.headers.get('content-type')?.toLowerCase() ?? ''
+  const contentLengthHeader = response.headers.get('content-length')
+  if (contentLengthHeader !== null && Number(contentLengthHeader) === 0) {
+    return undefined as T
+  }
+
+  if (contentType.includes('application/json')) {
+    try {
+      return (await response.json()) as T
+    } catch {
+      return undefined as T
+    }
+  }
+
+  const text = await response.text()
+  if (!text) {
+    return undefined as T
+  }
+
+  return text as unknown as T
 }
 
 /**
