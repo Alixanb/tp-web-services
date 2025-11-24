@@ -1,13 +1,14 @@
 import {
-  Injectable,
-  UnauthorizedException,
-  ConflictException,
+    ConflictException,
+    Injectable,
+    UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { AuditService } from 'src/audit/audit.service';
 import { User } from 'src/entities/user.entity';
+import { Repository } from 'typeorm';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { JwtPayload } from './strategies/jwt.strategy';
@@ -18,6 +19,7 @@ export class AuthService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private jwtService: JwtService,
+    private auditService: AuditService,
   ) {}
 
   async register(registerDto: RegisterDto) {
@@ -55,18 +57,20 @@ export class AuthService {
     };
   }
 
-  async login(loginDto: LoginDto) {
+  async login(loginDto: LoginDto, ip: string) {
     const { email, password } = loginDto;
 
     // Find user
     const user = await this.userRepository.findOne({ where: { email } });
     if (!user) {
+      await this.auditService.log('LOGIN_FAILED', null, ip, `Email: ${email}`);
       throw new UnauthorizedException('Invalid credentials');
     }
 
     // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
+      await this.auditService.log('LOGIN_FAILED', user.id, ip, 'Invalid password');
       throw new UnauthorizedException('Invalid credentials');
     }
 
@@ -75,6 +79,8 @@ export class AuthService {
 
     // Remove password from response
     delete user.password;
+
+    await this.auditService.log('LOGIN_SUCCESS', user.id, ip);
 
     return {
       user,

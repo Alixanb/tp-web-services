@@ -1,12 +1,12 @@
-import { useState, useEffect, useRef, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
-import { Search, Star } from 'lucide-react'
 import { eventService } from '@/services/event.service'
-import { venueService } from '@/services/venue.service'
 import { orderService } from '@/services/order.service'
+import { venueService } from '@/services/venue.service'
+import { Search, Star } from 'lucide-react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 // Fonction de formatage de devise
 function formatCurrency(value: number) {
@@ -120,7 +120,7 @@ export function Hero() {
       <div className="text-center space-y-4 sm:space-y-6 max-w-3xl mx-auto">
         <Badge className="mb-2 text-xs sm:text-sm" variant="secondary">
           <Star className="h-3 w-3 mr-1 fill-yellow-500 text-yellow-500" />
-          Plateforme #1 de Billetterie en Ligne
+          Plateforme de billetterie en ligne
         </Badge>
         <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight px-2">
           Découvrez les événements
